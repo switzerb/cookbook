@@ -21,7 +21,8 @@ public class Demo {
                 .withIngredient(new Count(2), egg)
                 .withIngredient(new Quantity(0.125, cup), milk);
         Recipe onionOmelet = new Recipe("Onion Omelet")
-                .withIngredient(new Count(2), egg)
+                // this one is admittedly sorta silly. :)
+                .withIngredient(new Count(2), scrambledEggs)
                 .withIngredient(new Quantity(0.25, cup), onion);
 
         Meal breakfast = new Meal("Breakfast")
@@ -119,7 +120,11 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
             if (i.item instanceof GroceryItem) {
                 result.add(new Purchase(i.quantity, (GroceryItem) i.item));
             } else if (i.item instanceof Shoppable) {
-                result.addAll(((Shoppable) i.item).getShoppingList());
+                ((Shoppable) i.item).getShoppingList()
+                        .stream()
+                        .map(it ->
+                                new Purchase(i.getQuantity().times(it.getQuantity()), it.getItem()))
+                        .forEach(result::add);
             } else {
                 throw new IllegalArgumentException("Unknown ingredient type: " + i.item.getClass().getSimpleName());
             }
@@ -127,7 +132,7 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
         return result;
     }
 
-    public Recipe withIngredient(Quantity q, GroceryItem item) {
+    public Recipe withIngredient(Quantity q, IngredientLike item) {
         ingredients.add(new Ingredient(q, item));
         return this;
     }
