@@ -24,11 +24,11 @@ public class Demo {
                 .withIngredient(new Count(2), egg)
                 .withIngredient(new Quantity(0.25, cup), onion);
 
-        Menu breakfast = new Menu("Breakfast")
+        Meal breakfast = new Meal("Breakfast")
                 .withDish(new Count(2), onionOmelet)
                 .withExtraItem(new Quantity(1, cup), oj);
 
-        MealPlan thisWeek = new MealPlan("This Week")
+        Planner thisWeek = new Planner("This Week")
                 .withSection("Monday", s -> s
                         .withDish(Quantity.ONE, breakfast))
                 .withSection("Tuesday", s -> s
@@ -41,16 +41,16 @@ public class Demo {
         System.out.println(thisWeek);
         System.out.println("======================================================================");
         thisWeek.getShoppingList().stream()
-                .collect(Collectors.groupingBy(Quantized::getItem))
+                .collect(Collectors.groupingBy(Ref::getItem))
                 .forEach((i, ps) -> System.out.println(new Purchase(ps.stream()
-                        .map(Quantized::getQuantity)
+                        .map(Ref::getQuantity)
                         .reduce(Quantity.ZERO, Quantity::plus), i)));
         System.out.println("======================================================================");
     }
 
 }
 
-class GroceryItem implements IngredientItem {
+class GroceryItem implements IngredientLike {
     String name; // orange juice
 
     public GroceryItem(String name) {
@@ -68,15 +68,15 @@ class GroceryItem implements IngredientItem {
 
 }
 
-interface IngredientItem {
+interface IngredientLike {
     String getName();
 }
 
-class Ingredient implements Quantized<IngredientItem> {
+class Ingredient implements Ref<IngredientLike> {
     Quantity quantity;
-    IngredientItem item;
+    IngredientLike item;
 
-    public Ingredient(Quantity quantity, IngredientItem item) {
+    public Ingredient(Quantity quantity, IngredientLike item) {
         this.quantity = quantity;
         this.item = item;
     }
@@ -87,7 +87,7 @@ class Ingredient implements Quantized<IngredientItem> {
     }
 
     @Override
-    public IngredientItem getItem() {
+    public IngredientLike getItem() {
         return item;
     }
 
@@ -98,7 +98,7 @@ class Ingredient implements Quantized<IngredientItem> {
 
 }
 
-class Recipe implements RecipeLike, Shoppable, IngredientItem {
+class Recipe implements RecipeLike, Shoppable, IngredientLike {
     String name; // enchiladas
     List<Ingredient> ingredients = new ArrayList<>();
     String directions;
@@ -141,7 +141,7 @@ class Recipe implements RecipeLike, Shoppable, IngredientItem {
 
 }
 
-class Dish implements Quantized<RecipeLike>, Shoppable {
+class Dish implements Ref<RecipeLike>, Shoppable {
     Quantity quantity;
     RecipeLike recipe;
 
@@ -176,14 +176,14 @@ class Dish implements Quantized<RecipeLike>, Shoppable {
 
 }
 
-class Menu implements RecipeLike, Shoppable {
+class Meal implements RecipeLike, Shoppable {
 
     String name; // 4th of July BBQ
     List<Dish> dishes = new ArrayList<>();
     List<ItemToPurchase> extraItems = new ArrayList<>();
     String notes;
 
-    public Menu(String name) {
+    public Meal(String name) {
         this.name = name;
     }
 
@@ -200,12 +200,12 @@ class Menu implements RecipeLike, Shoppable {
         return result;
     }
 
-    public Menu withDish(Quantity q, Recipe r) {
+    public Meal withDish(Quantity q, Recipe r) {
         dishes.add(new Dish(q, r));
         return this;
     }
 
-    public Menu withExtraItem(Quantity q, GroceryItem item) {
+    public Meal withExtraItem(Quantity q, GroceryItem item) {
         extraItems.add(new Purchase(q, item));
         return this;
     }
@@ -229,7 +229,7 @@ interface Shoppable {
     List<ItemToPurchase> getShoppingList();
 }
 
-interface ItemToPurchase extends Quantized<GroceryItem> {
+interface ItemToPurchase extends Ref<GroceryItem> {
 }
 
 class Purchase implements ItemToPurchase {
@@ -257,29 +257,29 @@ class Purchase implements ItemToPurchase {
     }
 }
 
-class MealPlan implements Shoppable {
+class Planner implements Shoppable {
     String name; // week of July 20
-    List<MealPlan> sections = new ArrayList<>();
+    List<Planner> sections = new ArrayList<>();
     List<Dish> dishes = new ArrayList<>();
     List<ItemToPurchase> extraItems = new ArrayList<>();
 
-    public MealPlan(String name) {
+    public Planner(String name) {
         this.name = name;
     }
 
-    public MealPlan withSection(String name, Consumer<MealPlan> sectionWork) {
-        MealPlan section = new MealPlan(name);
+    public Planner withSection(String name, Consumer<Planner> sectionWork) {
+        Planner section = new Planner(name);
         sections.add(section);
         sectionWork.accept(section);
         return this;
     }
 
-    public MealPlan withDish(Quantity q, RecipeLike r) {
+    public Planner withDish(Quantity q, RecipeLike r) {
         dishes.add(new Dish(q, r));
         return this;
     }
 
-    public MealPlan withExtraItem(Quantity q, GroceryItem item) {
+    public Planner withExtraItem(Quantity q, GroceryItem item) {
         extraItems.add(new Purchase(q, item));
         return this;
     }
@@ -387,7 +387,7 @@ class Count extends Quantity {
     }
 }
 
-interface Quantized<T> {
+interface Ref<T> {
     Quantity getQuantity();
 
     T getItem();
