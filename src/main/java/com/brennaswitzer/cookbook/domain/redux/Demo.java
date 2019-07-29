@@ -42,9 +42,9 @@ public class Demo {
         System.out.println(thisWeek);
         System.out.println("======================================================================");
         thisWeek.getShoppingList().stream()
-                .collect(Collectors.groupingBy(Ref::getItem))
+                .collect(Collectors.groupingBy(AmountOf::getItem))
                 .forEach((i, ps) -> System.out.println(new Purchase(ps.stream()
-                        .map(Ref::getQuantity)
+                        .map(AmountOf::getQuantity)
                         .reduce(Quantity.ZERO, Quantity::plus), i)));
         System.out.println("======================================================================");
     }
@@ -73,35 +73,36 @@ interface IngredientLike {
     String getName();
 }
 
-class Ingredient implements Ref<IngredientLike> {
-    Quantity quantity;
-    IngredientLike item;
-
-    public Ingredient(Quantity quantity, IngredientLike item) {
-        this.quantity = quantity;
-        this.item = item;
-    }
-
-    @Override
-    public Quantity getQuantity() {
-        return quantity;
-    }
-
-    @Override
-    public IngredientLike getItem() {
-        return item;
-    }
-
-    @Override
-    public String toString() {
-        return quantity + " " + item;
-    }
-
-}
-
 class Recipe implements RecipeLike, Shoppable, IngredientLike {
+
+    class Ref implements AmountOf<IngredientLike> {
+        Quantity quantity;
+        IngredientLike item;
+
+        public Ref(Quantity quantity, IngredientLike item) {
+            this.quantity = quantity;
+            this.item = item;
+        }
+
+        @Override
+        public Quantity getQuantity() {
+            return quantity;
+        }
+
+        @Override
+        public IngredientLike getItem() {
+            return item;
+        }
+
+        @Override
+        public String toString() {
+            return quantity + " " + item;
+        }
+
+    }
+
     String name; // enchiladas
-    List<Ingredient> ingredients = new ArrayList<>();
+    List<Ref> ingredients = new ArrayList<>();
     String directions;
 
     public Recipe(String name) {
@@ -133,7 +134,7 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
     }
 
     public Recipe withIngredient(Quantity q, IngredientLike item) {
-        ingredients.add(new Ingredient(q, item));
+        ingredients.add(new Ref(q, item));
         return this;
     }
 
@@ -146,45 +147,45 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
 
 }
 
-class Dish implements Ref<RecipeLike>, Shoppable {
-    Quantity quantity;
-    RecipeLike recipe;
-
-    public Dish(Quantity quantity, RecipeLike recipe) {
-        this.quantity = quantity;
-        this.recipe = recipe;
-    }
-
-    @Override
-    public Quantity getQuantity() {
-        return quantity;
-    }
-
-    @Override
-    public RecipeLike getItem() {
-        return recipe;
-    }
-
-    @Override
-    public List<ItemToPurchase> getShoppingList() {
-        return recipe.getShoppingList()
-                .stream()
-                .map(i ->
-                        new Purchase(i.getQuantity().times(quantity), i.getItem()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public String toString() {
-        return quantity + " " + recipe;
-    }
-
-}
-
 class Meal implements RecipeLike, Shoppable {
 
+    class Ref implements AmountOf<RecipeLike>, Shoppable {
+        Quantity quantity;
+        RecipeLike recipe;
+
+        public Ref(Quantity quantity, RecipeLike recipe) {
+            this.quantity = quantity;
+            this.recipe = recipe;
+        }
+
+        @Override
+        public Quantity getQuantity() {
+            return quantity;
+        }
+
+        @Override
+        public RecipeLike getItem() {
+            return recipe;
+        }
+
+        @Override
+        public List<ItemToPurchase> getShoppingList() {
+            return recipe.getShoppingList()
+                    .stream()
+                    .map(i ->
+                            new Purchase(i.getQuantity().times(quantity), i.getItem()))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public String toString() {
+            return quantity + " " + recipe;
+        }
+
+    }
+
     String name; // 4th of July BBQ
-    List<Dish> dishes = new ArrayList<>();
+    List<Ref> dishes = new ArrayList<>();
     List<ItemToPurchase> extraItems = new ArrayList<>();
     String notes;
 
@@ -206,7 +207,7 @@ class Meal implements RecipeLike, Shoppable {
     }
 
     public Meal withDish(Quantity q, Recipe r) {
-        dishes.add(new Dish(q, r));
+        dishes.add(new Ref(q, r));
         return this;
     }
 
@@ -234,7 +235,7 @@ interface Shoppable {
     List<ItemToPurchase> getShoppingList();
 }
 
-interface ItemToPurchase extends Ref<GroceryItem> {
+interface ItemToPurchase extends AmountOf<GroceryItem> {
 }
 
 class Purchase implements ItemToPurchase {
@@ -263,9 +264,45 @@ class Purchase implements ItemToPurchase {
 }
 
 class Planner implements Shoppable {
+
+    class Ref implements AmountOf<RecipeLike>, Shoppable {
+        Quantity quantity;
+        RecipeLike recipe;
+
+        public Ref(Quantity quantity, RecipeLike recipe) {
+            this.quantity = quantity;
+            this.recipe = recipe;
+        }
+
+        @Override
+        public Quantity getQuantity() {
+            return quantity;
+        }
+
+        @Override
+        public RecipeLike getItem() {
+            return recipe;
+        }
+
+        @Override
+        public List<ItemToPurchase> getShoppingList() {
+            return recipe.getShoppingList()
+                    .stream()
+                    .map(i ->
+                            new Purchase(i.getQuantity().times(quantity), i.getItem()))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public String toString() {
+            return quantity + " " + recipe;
+        }
+
+    }
+
     String name; // week of July 20
     List<Planner> sections = new ArrayList<>();
-    List<Dish> dishes = new ArrayList<>();
+    List<Ref> dishes = new ArrayList<>();
     List<ItemToPurchase> extraItems = new ArrayList<>();
 
     public Planner(String name) {
@@ -280,7 +317,7 @@ class Planner implements Shoppable {
     }
 
     public Planner withDish(Quantity q, RecipeLike r) {
-        dishes.add(new Dish(q, r));
+        dishes.add(new Ref(q, r));
         return this;
     }
 
@@ -333,6 +370,11 @@ class UnitOfMeasure {
         return Objects.hash(name);
     }
 }
+
+// maybe this triple?
+//   interface Quantity
+//   class ScaledQuantity implements Quantity
+//   class Count implements Quantity
 
 class Quantity {
     public static final Quantity ZERO = new Quantity(0, null);
@@ -392,7 +434,7 @@ class Count extends Quantity {
     }
 }
 
-interface Ref<T> {
+interface AmountOf<T> {
     Quantity getQuantity();
 
     T getItem();
