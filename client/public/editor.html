@@ -1,0 +1,181 @@
+<!doctype html>
+<!--suppress HtmlUnknownTarget -->
+<html lang="en">
+<head>
+    <title>Demo</title>
+    <style type="text/css">
+        [contenteditable] {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+<div id="editor">1.5 cu fl</div>
+<pre id="parse"></pre>
+<script type="text/javascript">
+    // based on https://codepen.io/neoux/pen/OVzMor
+    function getCaretPosition() {
+        if (window.getSelection == null) return -1;
+        var selectedObj = window.getSelection();
+        if (selectedObj.getRangeAt == null) return -1;
+        var range = selectedObj.getRangeAt(0);
+        var rangeCount = 0;
+        var childNodes = selectedObj.anchorNode.parentNode.childNodes;
+        for (var i = 0; i < childNodes.length; i++) {
+            if (childNodes[i] === selectedObj.anchorNode) {
+                break;
+            }
+            if (childNodes[i].outerHTML) {
+                rangeCount += childNodes[i].outerHTML.length;
+            } else if (childNodes[i].nodeType === 3) {
+                rangeCount += childNodes[i].textContent.length;
+            }
+        }
+        return range.startOffset + rangeCount;
+    }
+
+    // from src/util/debounce.js
+    const debounce = (fn, delay = 100) => {
+        let timeout = null
+        return (...args) => {
+            if (timeout != null) {
+                clearTimeout(timeout)
+            }
+            timeout = setTimeout(() => {
+                timeout = null
+                fn(...args)
+            }, delay)
+        }
+    }
+
+    // the "database"
+    UNITS = "cup,tsp,Tbsp,teaspoon,Tablespoon,ounce,oz".split(",");
+    ITEMS = "bouillon cube,flour,eggs,flip-flops,flippers,salt,sugar,water,milk,cucumber".split(",");
+
+    // the parser "API"
+    const parseThatShit = (query, caret, callback) => {
+        if (query == null || query.trim().length === 0) return;
+        if (query.trim() !== query) return;
+        const ranges = [];
+        const suggestions = [];
+        const words = query.split(" ");
+        let wIdx = 0;
+        let amount = null;
+        let unit = null;
+        const c = words[wIdx].charAt(0);
+        if ((c >= "0" && c <= "9") || c === ".") {
+            amount = parseFloat(words[wIdx]);
+            wIdx += 1;
+            if (!isNaN(amount)) {
+                ranges.push({
+                    start: 0,
+                    end: words[wIdx].length,
+                    style: "amount",
+                });
+            }
+        }
+        for (let i = wIdx; i < words.length; i++) {
+            const w = words[i];
+            console.log("check", w)
+            const sow = words.slice(0, i)
+                .reduce((n, w) => n + w.length, i);
+            if (amount != null && unit == null) {
+                // see about a unit
+                let u = UNITS.find(u => u === w);
+                if (u != null) {
+                    // exact match!
+                    unit = u;
+                    ranges.push({
+                        start: sow,
+                        end: sow + u.length,
+                        style: "unit",
+                    });
+                    console.log("exact match on", u)
+                    continue;
+                }
+                const partials = UNITS.filter(u => u.indexOf(w) === 0)
+                partials.forEach(u => {
+                    unit = u; // not really true, but whatever
+                    suggestions.push({
+                        option: u,
+                        group: "units",
+                        accept: {
+                            start: sow,
+                            end: sow + w.length,
+                            caret: sow + u.length,
+                        },
+                    });
+                });
+            }
+            let it = ITEMS.find(it => it === w);
+            if (it != null) {
+                // exact match!
+                ranges.push({
+                    start: sow,
+                    end: sow + it.length,
+                    style: "item",
+                });
+                console.log("exact match on", it)
+                continue;
+            }
+            ITEMS.filter(it => it.indexOf(w) === 0)
+                .forEach(it => {
+                    console.log("prefix match on", it)
+                    suggestions.push({
+                        option: it,
+                        group: "items",
+                        accept: {
+                            start: sow,
+                            end: sow + w.length,
+                            caret: sow + it.length,
+                        },
+                    })
+                });
+            ITEMS.filter(it => it.indexOf(w) !== 0 && it.indexOf(w) > 0)
+                .forEach(it => {
+                    console.log("substring match on", it)
+                    const idx = it.indexOf(w)
+                    suggestions.push({
+                        option: {
+                            name: it,
+                            start: idx,
+                            end: idx + w.length,
+                        },
+                        group: "items",
+                        accept: {
+                            start: sow,
+                            end: sow + w.length,
+                            caret: sow + it.length,
+                        },
+                    })
+                });
+        }
+        const response = {
+            query,
+            caret,
+            ranges,
+            suggestions,
+        }
+        setTimeout(() => callback(response), 150 + Math.random() * 300);
+    };
+
+    E = document.getElementById("editor");
+    P = document.getElementById("parse");
+    E.setAttribute("contenteditable", true);
+    handleUserInteraction = debounce(e => {
+        console.log(e);
+        const query = E.innerText;
+        const caret = getCaretPosition();
+        console.log("  ", query, caret);
+        parseThatShit(query, caret, r => {
+            if (r.query !== query || r.caret !== caret) return;
+            console.log("PARSE", r);
+            P.innerText = JSON.stringify(r, null, 3);
+        });
+    }, 150);
+    E.addEventListener("input", handleUserInteraction);
+    E.addEventListener("keyup", handleUserInteraction);
+    E.addEventListener("mouseup", handleUserInteraction);
+</script>
+</body>
+</html>
