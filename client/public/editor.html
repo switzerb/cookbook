@@ -71,6 +71,7 @@
     // the "database"
     UNITS = "cup,tsp,Tbsp,teaspoon,Tablespoon,ounce,oz".split(",");
     ITEMS = "bouillon cube,flour,eggs,flip-flops,flippers,salt,sugar,water,milk,cucumber".split(",");
+    NUM_RE = /^[0-9]+(\.[0-9]*)?$/;
 
     // the parser "API"
     const parseThatShit = (query, caret, callback) => {
@@ -82,10 +83,8 @@
         let wIdx = 0;
         let amount = null;
         let unit = null;
-        const c = words[wIdx].charAt(0);
-        if ((c >= "0" && c <= "9") || c === ".") {
+        if (NUM_RE.test(words[wIdx])) {
             amount = parseFloat(words[wIdx]);
-            wIdx += 1;
             if (!isNaN(amount)) {
                 ranges.push({
                     start: 0,
@@ -93,10 +92,10 @@
                     type: "amount",
                 });
             }
+            wIdx += 1;
         }
         for (let i = wIdx; i < words.length; i++) {
             const w = words[i];
-            console.log("check", w)
             const sow = words.slice(0, i)
                 .reduce((n, w) => n + w.length, i);
             if (amount != null && unit == null) {
@@ -110,7 +109,6 @@
                         end: sow + u.length,
                         type: "unit",
                     });
-                    console.log("exact match on", u)
                     continue;
                 }
                 const partials = UNITS.filter(u => u.indexOf(w) === 0)
@@ -135,12 +133,10 @@
                     end: sow + it.length,
                     type: "item",
                 });
-                console.log("exact match on", it)
                 continue;
             }
             ITEMS.filter(it => it.indexOf(w) === 0)
                 .forEach(it => {
-                    console.log("prefix match on", it)
                     suggestions.push({
                         option: it,
                         type: "item",
@@ -153,7 +149,6 @@
                 });
             ITEMS.filter(it => it.indexOf(w) !== 0 && it.indexOf(w) > 0)
                 .forEach(it => {
-                    console.log("substring match on", it)
                     const idx = it.indexOf(w)
                     suggestions.push({
                         option: {
@@ -182,21 +177,60 @@
     E = document.getElementById("editor");
     R = document.getElementById("request");
     P = document.getElementById("parse");
-    handleUserInteraction = debounce(e => {
-        console.log(e);
-        const query = E.innerText;
-        const caret = getCaretCharacterOffsetWithin(E);
-        R.innerText = JSON.stringify({query, caret}, null, 3);
-        console.log("  ", query, caret);
-        parseThatShit(query, caret, r => {
-            if (r.query !== query || r.caret !== caret) return;
-            console.log("PARSE", r);
-            P.innerText = JSON.stringify(r, null, 3);
-        });
-    }, 150);
-    E.addEventListener("input", handleUserInteraction);
-    E.addEventListener("keyup", handleUserInteraction);
-    E.addEventListener("mouseup", handleUserInteraction);
+    const empty = node => {
+        while (node.firstChild) {
+            node.removeChild(node.firstChild);
+        }
+    };
+    (function () {
+        let query = "";
+        let caret = -1;
+        reparse = debounce(() => {
+            parseThatShit(query, caret, r => {
+                if (r.query !== query || r.caret !== caret) return;
+                P.innerText = JSON.stringify(r, null, 3);
+                // now update!
+                let pos = 0
+                let segments = []
+                r.ranges.sort((a, b) => a.start - b.start)
+                    .map((it, i, rs) => {
+                        if (i === 0) return it;
+                        const prev = rs[i - 1];
+                        if (it.start >= prev.end) return it;
+                        return {
+                            ...it,
+                            start: prev.end, // no overlaps!
+                        }
+                    })
+                    .forEach(({start, end, type}) => {
+                        if (start > pos) {
+                            segments.push(query.substring(pos, start))
+                        }
+                        segments.push(`<span class="${type}">${query.substring(
+                            start,
+                            end,
+                        )}</span>`)
+                        pos = end
+                    });
+                if (pos < query.length) {
+                    segments.push(query.substring(pos))
+                }
+                E.innerHTML = segments.join("");
+            });
+        }, 150)
+        handleUserInteraction = e => {
+            const q = E.innerText;
+            const c = getCaretCharacterOffsetWithin(E);
+            if (caret === c && query === q) return;
+            query = q;
+            caret = c;
+            R.innerText = JSON.stringify({query, caret}, null, 3);
+            reparse();
+        };
+        E.addEventListener("input", handleUserInteraction);
+        E.addEventListener("keyup", handleUserInteraction);
+        E.addEventListener("mouseup", handleUserInteraction);
+    })();
 </script>
 </body>
 </html>
