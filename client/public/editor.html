@@ -214,8 +214,8 @@
 
     // the parser "API"
     const parseThatShit = (query, caret, callback) => {
-        if (query == null || query.trim().length === 0) return;
-        if (query.trim() !== query) return;
+        if (query == null || query.trim().length === 0) return callback();
+        if (query.trim() !== query) return callback();
         const ranges = [];
         const suggestions = [];
         const words = query.split(" ");
@@ -328,8 +328,9 @@
         reparse = debounce(() => {
             R.innerText = JSON.stringify({query, caret}, null, 3);
             parseThatShit(query, caret, r => {
-                if (r.query !== query || r.caret !== caret) return;
+                empty(A);
                 P.innerText = JSON.stringify(r, null, 3);
+                if (r == null || r.query !== query || r.caret !== caret) return;
                 // now update!
                 let pos = 0
                 let segments = []
@@ -369,7 +370,6 @@
                 setTimeout(() =>
                     console.log("      b", caret, p, c.getPosition(), o, c.getOffset()))
                 // and auto-complete!
-                empty(A);
                 r.suggestions
                     .map(s => {
                         const text = typeof s.option === "string"
