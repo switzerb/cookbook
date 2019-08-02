@@ -365,7 +365,7 @@
                 const o = c.getOffset();
                 E.innerHTML = `<span>${segments.join("")}</span>`;
                 console.log("caret a", caret, p, c.getPosition(), o, c.getOffset())
-                c.setPosition(p);
+                c.setPosition(caret);
                 setTimeout(() =>
                     console.log("      b", caret, p, c.getPosition(), o, c.getOffset()))
                 // and auto-complete!
