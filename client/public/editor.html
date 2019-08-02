@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-<div id="editor" contenteditable="true">1.5 cup fl</div>
+<div id="editor" contenteditable="true">1.5 cu fl</div>
 <ul id="autocomplete"></ul>
 <pre id="request"></pre>
 <pre id="parse"></pre>
@@ -238,7 +238,7 @@
             });
         }, 150)
         handleUserInteraction = e => {
-            const q = E.innerText;
+            const q = E.innerText.replace(/\u00A0/g, " ");
             const c = getCaretCharacterOffsetWithin(E);
             if (caret === c && query === q) return;
             query = q;
