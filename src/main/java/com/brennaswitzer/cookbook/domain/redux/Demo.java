@@ -123,8 +123,7 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
             } else if (i.item instanceof Shoppable) {
                 ((Shoppable) i.item).getShoppingList()
                         .stream()
-                        .map(it ->
-                                new Purchase(i.getQuantity().times(it.getQuantity()), it.getItem()))
+                        .map(it -> it.scale(i.getQuantity()))
                         .forEach(result::add);
             } else {
                 throw new IllegalArgumentException("Unknown ingredient type: " + i.item.getClass().getSimpleName());
@@ -172,8 +171,7 @@ class Meal implements RecipeLike, Shoppable {
         public List<ItemToPurchase> getShoppingList() {
             return recipe.getShoppingList()
                     .stream()
-                    .map(i ->
-                            new Purchase(i.getQuantity().times(quantity), i.getItem()))
+                    .map(it -> it.scale(quantity))
                     .collect(Collectors.toList());
         }
 
@@ -236,6 +234,8 @@ interface Shoppable {
 }
 
 interface ItemToPurchase extends AmountOf<GroceryItem> {
+    ItemToPurchase scale(double amount);
+    ItemToPurchase scale(Quantity quantity);
 }
 
 class Purchase implements ItemToPurchase {
@@ -255,6 +255,15 @@ class Purchase implements ItemToPurchase {
     @Override
     public GroceryItem getItem() {
         return item;
+    }
+
+    public ItemToPurchase scale(double amount) {
+        return scale(new Count(amount));
+    }
+
+    @Override
+    public ItemToPurchase scale(Quantity quantity) {
+        return new Purchase(this.quantity.times(quantity), this.item);
     }
 
     @Override
@@ -288,8 +297,7 @@ class Planner implements Shoppable {
         public List<ItemToPurchase> getShoppingList() {
             return recipe.getShoppingList()
                     .stream()
-                    .map(i ->
-                            new Purchase(i.getQuantity().times(quantity), i.getItem()))
+                    .map(it -> it.scale(quantity))
                     .collect(Collectors.toList());
         }
 
@@ -420,9 +428,7 @@ class Quantity {
         if (other.unit == null) {
             return new Quantity(amount * other.amount, unit);
         }
-        if (!unit.equals(other.unit)) {
-            logger.warn("Multiplying Quantities w/ different units?! '" + this + "'.times('" + other + "')");
-        }
+        logger.warn("Multiplying Quantities w/ units?! '" + this + "'.times('" + other + "')");
         return new Quantity(amount * other.amount, unit);
     }
 
