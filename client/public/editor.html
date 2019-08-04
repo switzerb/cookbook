@@ -402,5 +402,65 @@
         E.addEventListener("mouseup", handleUserInteraction);
     })();
 </script>
+<pre style="padding:5px 10px;background-color:#f7f7f7;border:1px solid #ddd;border-radius:0.5em;width:fit-content;">
+# UI Components
+
+-   a single-line editor (an INPUT replacement)
+    -   indicate if the ref is parsed or not
+    -   hint at the item name
+    -   be unobtrusive when not focused, but still indicate when attention is
+        needed
+-   a "list of editors" component w/ some sophistication for operating on a
+    vertical list of editor components (a TEXTAREA replacement).
+    -   pasting a multi-line string into one editor should split the string
+        up and create N-1 new editors below the target for each of the
+        second and subsequent lines pasted.
+    -   up/down arrows should move to the prev/next editor (if there is one)
+        AND maintain the caret position in the line.
+
+# UI Changes
+
+-   RecipeForm should use the "list of editors" above instead of TEXTAREA
+    for accepting raw ingredients
+-   AddRecipe and EditRecipe shouldn't allow the user to submit until all refs
+    are parsed.
+-   the "parse" button on ViewRecipe should cease to exist, and corrections
+    will be made by editing the recipe, and using the editor(s) there. though
+    there should still be clear visual indication that attention is needed.
+-   "has unparsed ingredient(s)" should be a more flagrant visual cue in the
+    UI, rather than only you open a recipe for viewing. E.g., decorate recipe
+    title everywhere.
+
+# DraftRecipeStore
+
+-   no more `rawIngredients` string; rather the ingredients themselves will
+    be edited directly. This means synthesizing a "parse result" for the
+    current state of the ref (NOT how the parser would parse the raw).
+
+# API Endpoints
+
+-   `/api/recipe/_action` type `PARSE_RAW_REF` w/ parameterized with the raw
+    string, and returning a parse result. Some additional parameterization
+    of what type(s) of items should be name-matched will be needed too.
+
+# Services
+
+-   a parser to back the endpoint above accepting a raw string and caret
+    position, and returning a result containing two lists:
+    -   ranges (start/end codepoints, and "type")
+    -   completions (name, "type", and how to munge the string if accepted)
+
+# Repositories
+
+Each repository needs to have a `fuzzyMatch(String guess)` (or something)
+method which returns a `List` of matches, ordered by relevance. Each match
+should have the candidate entity and some sort of "confidence rating" for the
+match (from 0-1). These need to be _fast_, as they're going to get called a
+lot.
+
+-   Unit
+-   PantryItem
+-   Recipe
+</pre>
 </body>
 </html>
