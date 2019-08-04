@@ -443,12 +443,31 @@
     string, and returning a parse result. Some additional parameterization
     of what type(s) of items should be name-matched will be needed too.
 
-# Services
+# Parser
 
--   a parser to back the endpoint above accepting a raw string and caret
-    position, and returning a result containing two lists:
-    -   ranges (start/end codepoints, and "type")
-    -   completions (name, "type", and how to munge the string if accepted)
+To back the endpoint above accepting a raw string and caret position, and
+returning a result containing two lists:
+
+-   ranges (start/end codepoints, and "type")
+-   completions (name, "type", and how to munge the string if accepted)
+
+Raw strings are assumed (for now) to match this psuedo-grammar:
+
+    ( amount units? )? prep? name prep? ("," prep)
+
+The amount may be several words (e.g., "1 and 1/2"), but will always be at the
+start of the line, and be identified by either a numeric digit, a vulgar
+fraction, or one of a handful of "number words" (e.g., "one" or "half").
+
+The units are only looked for if an amount is found, and may also be multiple
+words (e.g., "fluid ounces"). They're never identifiable, other than by a "good
+match" against the Unit repository.
+
+The name identifies the repository Entity being referenced, and is the fuzziest
+part of the whole shebang. Like units, names may be multiple words, and there
+may be "prep" text around the name in a whole host of different configurations.
+In addition, there may be multiple potential repositories to match into (e.g.,
+when adding recipe ingredients, names can match `PantryItem` or `Recipe`).
 
 # Repositories
 
