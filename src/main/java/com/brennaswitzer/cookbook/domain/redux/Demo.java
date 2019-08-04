@@ -3,7 +3,10 @@ package com.brennaswitzer.cookbook.domain.redux;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -52,9 +55,9 @@ public class Demo {
 }
 
 class GroceryItem implements IngredientLike {
-    String name; // orange juice
+    private String name; // orange juice
 
-    public GroceryItem(String name) {
+    GroceryItem(String name) {
         this.name = name;
     }
 
@@ -75,11 +78,11 @@ interface IngredientLike {
 
 class Recipe implements RecipeLike, Shoppable, IngredientLike {
 
-    class Ref implements AmountOf<IngredientLike> {
+    static class Ref implements AmountOf<IngredientLike> {
         Quantity quantity;
         IngredientLike item;
 
-        public Ref(Quantity quantity, IngredientLike item) {
+        Ref(Quantity quantity, IngredientLike item) {
             this.quantity = quantity;
             this.item = item;
         }
@@ -101,11 +104,11 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
 
     }
 
-    String name; // enchiladas
-    List<Ref> ingredients = new ArrayList<>();
-    String directions;
+    private String name; // enchiladas
+    private List<Ref> ingredients = new ArrayList<>();
+    private String directions;
 
-    public Recipe(String name) {
+    Recipe(String name) {
         this.name = name;
     }
 
@@ -132,9 +135,17 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
         return result;
     }
 
-    public Recipe withIngredient(Quantity q, IngredientLike item) {
+    Recipe withIngredient(Quantity q, IngredientLike item) {
         ingredients.add(new Ref(q, item));
         return this;
+    }
+
+    public String getDirections() {
+        return directions;
+    }
+
+    public void setDirections(String directions) {
+        this.directions = directions;
     }
 
     public String toString() {
@@ -148,11 +159,11 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
 
 class Meal implements RecipeLike, Shoppable {
 
-    class Ref implements AmountOf<RecipeLike>, Shoppable {
+    static class Ref implements AmountOf<RecipeLike>, Shoppable {
         Quantity quantity;
         RecipeLike recipe;
 
-        public Ref(Quantity quantity, RecipeLike recipe) {
+        Ref(Quantity quantity, RecipeLike recipe) {
             this.quantity = quantity;
             this.recipe = recipe;
         }
@@ -182,12 +193,12 @@ class Meal implements RecipeLike, Shoppable {
 
     }
 
-    String name; // 4th of July BBQ
-    List<Ref> dishes = new ArrayList<>();
-    List<ItemToPurchase> extraItems = new ArrayList<>();
-    String notes;
+    private String name; // 4th of July BBQ
+    private List<Ref> dishes = new ArrayList<>();
+    private List<ItemToPurchase> extraItems = new ArrayList<>();
+    private String notes;
 
-    public Meal(String name) {
+    Meal(String name) {
         this.name = name;
     }
 
@@ -204,14 +215,22 @@ class Meal implements RecipeLike, Shoppable {
         return result;
     }
 
-    public Meal withDish(Quantity q, Recipe r) {
+    Meal withDish(Quantity q, Recipe r) {
         dishes.add(new Ref(q, r));
         return this;
     }
 
-    public Meal withExtraItem(Quantity q, GroceryItem item) {
+    Meal withExtraItem(Quantity q, GroceryItem item) {
         extraItems.add(new Purchase(q, item));
         return this;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public String toString() {
@@ -229,20 +248,23 @@ interface RecipeLike extends Shoppable {
     String getName();
 }
 
+//  this is really "requires items" or something?
 interface Shoppable {
     List<ItemToPurchase> getShoppingList();
 }
 
+// this is really "required item" or something?
 interface ItemToPurchase extends AmountOf<GroceryItem> {
     ItemToPurchase scale(double amount);
+
     ItemToPurchase scale(Quantity quantity);
 }
 
 class Purchase implements ItemToPurchase {
-    Quantity quantity;
-    GroceryItem item;
+    private Quantity quantity;
+    private GroceryItem item;
 
-    public Purchase(Quantity quantity, GroceryItem item) {
+    Purchase(Quantity quantity, GroceryItem item) {
         this.quantity = quantity;
         this.item = item;
     }
@@ -274,11 +296,11 @@ class Purchase implements ItemToPurchase {
 
 class Planner implements Shoppable {
 
-    class Ref implements AmountOf<RecipeLike>, Shoppable {
+    static class Ref implements AmountOf<RecipeLike>, Shoppable {
         Quantity quantity;
         RecipeLike recipe;
 
-        public Ref(Quantity quantity, RecipeLike recipe) {
+        Ref(Quantity quantity, RecipeLike recipe) {
             this.quantity = quantity;
             this.recipe = recipe;
         }
@@ -308,28 +330,28 @@ class Planner implements Shoppable {
 
     }
 
-    String name; // week of July 20
-    List<Planner> sections = new ArrayList<>();
-    List<Ref> dishes = new ArrayList<>();
-    List<ItemToPurchase> extraItems = new ArrayList<>();
+    private String name; // week of July 20
+    private List<Planner> sections = new ArrayList<>();
+    private List<Ref> dishes = new ArrayList<>();
+    private List<ItemToPurchase> extraItems = new ArrayList<>();
 
-    public Planner(String name) {
+    Planner(String name) {
         this.name = name;
     }
 
-    public Planner withSection(String name, Consumer<Planner> sectionWork) {
+    Planner withSection(String name, Consumer<Planner> sectionWork) {
         Planner section = new Planner(name);
         sections.add(section);
         sectionWork.accept(section);
         return this;
     }
 
-    public Planner withDish(Quantity q, RecipeLike r) {
+    Planner withDish(Quantity q, RecipeLike r) {
         dishes.add(new Ref(q, r));
         return this;
     }
 
-    public Planner withExtraItem(Quantity q, GroceryItem item) {
+    Planner withExtraItem(Quantity q, GroceryItem item) {
         extraItems.add(new Purchase(q, item));
         return this;
     }
@@ -358,10 +380,8 @@ class Planner implements Shoppable {
 
 class UnitOfMeasure {
     String name;
-    Set<String> aliases;
-    Map<UnitOfMeasure, Double> conversions;
 
-    public UnitOfMeasure(String name) {
+    UnitOfMeasure(String name) {
         this.name = name;
     }
 
@@ -388,12 +408,12 @@ class Quantity {
     public static final Quantity ZERO = new Quantity(0, null);
     public static final Quantity ONE = new Quantity(1, null);
 
-    protected static final Log logger = LogFactory.getLog(Quantity.class);
+    private static final Log logger = LogFactory.getLog(Quantity.class);
 
-    double amount;
-    UnitOfMeasure unit;
+    private double amount;
+    private UnitOfMeasure unit;
 
-    public Quantity(double amount, UnitOfMeasure unit) {
+    Quantity(double amount, UnitOfMeasure unit) {
         this.amount = amount;
         this.unit = unit;
     }
@@ -435,7 +455,7 @@ class Quantity {
 }
 
 class Count extends Quantity {
-    public Count(double number) {
+    Count(double number) {
         super(number, null);
     }
 }
