@@ -33,7 +33,7 @@ public class Demo {
                 .withDish(new Count(2), onionOmelet)
                 .withExtraItem(new Quantity(1, cup), oj);
 
-        Planner thisWeek = new Planner("This Week")
+        Plan thisWeek = new Plan("This Week")
                 .withSection("Monday", s -> s
                         .withDish(Quantity.ONE, breakfast))
                 .withSection("Tuesday", s -> s
@@ -55,7 +55,7 @@ public class Demo {
 
 }
 
-class GroceryItem implements IngredientLike {
+class GroceryItem implements ItemInRecipe {
     private String name; // orange juice
 
     GroceryItem(String name) {
@@ -73,17 +73,17 @@ class GroceryItem implements IngredientLike {
 
 }
 
-interface IngredientLike extends Named {
+interface ItemInRecipe extends Named {
     String getName();
 }
 
-class Recipe implements RecipeLike, RequiresItems, IngredientLike {
+class Recipe implements ItemInPlan, RequiresItems, ItemInRecipe {
 
-    static class Ref implements AmountOf<IngredientLike> {
+    static class Ref implements AmountOf<ItemInRecipe> {
         Quantity quantity;
-        IngredientLike item;
+        ItemInRecipe item;
 
-        Ref(Quantity quantity, IngredientLike item) {
+        Ref(Quantity quantity, ItemInRecipe item) {
             this.quantity = quantity;
             this.item = item;
         }
@@ -94,7 +94,7 @@ class Recipe implements RecipeLike, RequiresItems, IngredientLike {
         }
 
         @Override
-        public IngredientLike getItem() {
+        public ItemInRecipe getItem() {
             return item;
         }
 
@@ -136,7 +136,7 @@ class Recipe implements RecipeLike, RequiresItems, IngredientLike {
         return result;
     }
 
-    Recipe withIngredient(Quantity q, IngredientLike item) {
+    Recipe withIngredient(Quantity q, ItemInRecipe item) {
         ingredients.add(new Ref(q, item));
         return this;
     }
@@ -158,13 +158,13 @@ class Recipe implements RecipeLike, RequiresItems, IngredientLike {
 
 }
 
-class Meal implements RecipeLike, RequiresItems {
+class Meal implements ItemInPlan, RequiresItems {
 
-    static class Ref implements AmountOf<RecipeLike> {
+    static class Ref implements AmountOf<ItemInPlan> {
         Quantity quantity;
-        RecipeLike recipe;
+        ItemInPlan recipe;
 
-        Ref(Quantity quantity, RecipeLike recipe) {
+        Ref(Quantity quantity, ItemInPlan recipe) {
             this.quantity = quantity;
             this.recipe = recipe;
         }
@@ -175,7 +175,7 @@ class Meal implements RecipeLike, RequiresItems {
         }
 
         @Override
-        public RecipeLike getItem() {
+        public ItemInPlan getItem() {
             return recipe;
         }
 
@@ -244,7 +244,7 @@ class Meal implements RecipeLike, RequiresItems {
 
 }
 
-interface RecipeLike extends Named, RequiresItems {
+interface ItemInPlan extends Named, RequiresItems {
     String getName();
 }
 
@@ -277,13 +277,13 @@ class RequiredItem implements AmountOf<GroceryItem> {
     }
 }
 
-class Planner implements RequiresItems {
+class Plan implements RequiresItems {
 
-    static class Ref implements AmountOf<RecipeLike> {
+    static class Ref implements AmountOf<ItemInPlan> {
         Quantity quantity;
-        RecipeLike recipe;
+        ItemInPlan recipe;
 
-        Ref(Quantity quantity, RecipeLike recipe) {
+        Ref(Quantity quantity, ItemInPlan recipe) {
             this.quantity = quantity;
             this.recipe = recipe;
         }
@@ -294,7 +294,7 @@ class Planner implements RequiresItems {
         }
 
         @Override
-        public RecipeLike getItem() {
+        public ItemInPlan getItem() {
             return recipe;
         }
 
@@ -313,27 +313,27 @@ class Planner implements RequiresItems {
     }
 
     private String name; // week of July 20
-    private List<Planner> sections = new ArrayList<>();
+    private List<Plan> sections = new ArrayList<>();
     private List<Ref> dishes = new ArrayList<>();
     private List<AmountOf<GroceryItem>> extraItems = new ArrayList<>();
 
-    Planner(String name) {
+    Plan(String name) {
         this.name = name;
     }
 
-    Planner withSection(String name, Consumer<Planner> sectionWork) {
-        Planner section = new Planner(name);
+    Plan withSection(String name, Consumer<Plan> sectionWork) {
+        Plan section = new Plan(name);
         sections.add(section);
         sectionWork.accept(section);
         return this;
     }
 
-    Planner withDish(Quantity q, RecipeLike r) {
+    Plan withDish(Quantity q, ItemInPlan r) {
         dishes.add(new Ref(q, r));
         return this;
     }
 
-    Planner withExtraItem(Quantity q, GroceryItem item) {
+    Plan withExtraItem(Quantity q, GroceryItem item) {
         extraItems.add(new RequiredItem(q, item));
         return this;
     }
