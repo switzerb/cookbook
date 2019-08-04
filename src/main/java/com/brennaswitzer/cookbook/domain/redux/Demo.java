@@ -72,7 +72,7 @@ class GroceryItem implements IngredientLike {
 
 }
 
-interface IngredientLike {
+interface IngredientLike extends Named {
     String getName();
 }
 
@@ -244,7 +244,7 @@ class Meal implements RecipeLike, Shoppable {
 
 }
 
-interface RecipeLike extends Shoppable {
+interface RecipeLike extends Named, Shoppable {
     String getName();
 }
 
@@ -460,7 +460,11 @@ class Count extends Quantity {
     }
 }
 
-interface AmountOf<T> {
+interface Named {
+    String getName();
+}
+
+interface AmountOf<T extends Named> {
     Quantity getQuantity();
 
     T getItem();
