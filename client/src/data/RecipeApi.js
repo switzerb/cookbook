@@ -2,6 +2,7 @@ import BaseAxios from 'axios'
 import RecipeActions from './RecipeActions'
 import { API_BASE_URL } from "../constants/index"
 import promiseFlux from "../util/promiseFlux"
+import LibraryActions from "./LibraryActions"
 
 const axios = BaseAxios.create({
     baseURL: `${API_BASE_URL}/api`,
@@ -60,6 +61,21 @@ const RecipeApi = {
             }),
         )
     },
+
+    previewShoppingList(recipeIds) {
+        promiseFlux(
+            axios.post(`/recipe/${recipeIds[0]}/_actions`, {
+                type: "PREVIEW_SHOPPING_LIST",
+                additionalRecipeIds: recipeIds.slice(1),
+            }),
+            (data) => ({
+                type: LibraryActions.LIST_PREVIEW_LOADED,
+                recipeIds,
+                data: data.data,
+            }),
+            LibraryActions.LIST_PREVIEW_ERROR,
+        )
+    },
     
     recordIngredientDissection(recipeId, raw, quantity, units, name, prep) {
         promiseFlux(
@@ -79,8 +95,8 @@ const RecipeApi = {
                 raw,
             }),
         )
-    }
-    
+    },
+
 }
 
 export default RecipeApi
