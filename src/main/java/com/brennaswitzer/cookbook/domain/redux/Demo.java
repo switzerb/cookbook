@@ -83,7 +83,8 @@ class Recipe implements ItemInPlan, RequiresItems, ItemInRecipe {
         Quantity quantity;
         ItemInRecipe item;
 
-        Ref(Quantity quantity, ItemInRecipe item) {
+        @SuppressWarnings("WeakerAccess")
+        public Ref(Quantity quantity, ItemInRecipe item) {
             this.quantity = quantity;
             this.item = item;
         }
@@ -164,7 +165,8 @@ class Meal implements ItemInPlan, RequiresItems {
         Quantity quantity;
         ItemInPlan recipe;
 
-        Ref(Quantity quantity, ItemInPlan recipe) {
+        @SuppressWarnings("WeakerAccess")
+        public Ref(Quantity quantity, ItemInPlan recipe) {
             this.quantity = quantity;
             this.recipe = recipe;
         }
@@ -256,7 +258,8 @@ class RequiredItem implements AmountOf<GroceryItem> {
     private Quantity quantity;
     private GroceryItem item;
 
-    RequiredItem(Quantity quantity, GroceryItem item) {
+    @SuppressWarnings("WeakerAccess")
+    public RequiredItem(Quantity quantity, GroceryItem item) {
         this.quantity = quantity;
         this.item = item;
     }
@@ -283,7 +286,8 @@ class Plan implements RequiresItems {
         Quantity quantity;
         ItemInPlan recipe;
 
-        Ref(Quantity quantity, ItemInPlan recipe) {
+        @SuppressWarnings("WeakerAccess")
+        public Ref(Quantity quantity, ItemInPlan recipe) {
             this.quantity = quantity;
             this.recipe = recipe;
         }
@@ -446,6 +450,7 @@ interface Named {
     String getName();
 }
 
+// implementations MUST provide a public (Quantity, T) constructor
 interface AmountOf<T extends Named> {
     Quantity getQuantity();
 
