@@ -14,6 +14,7 @@ import {
     addDistinct,
     removeDistinct,
 } from "../util/arrayAsSet"
+import WindowActions from "./WindowActions"
 
 const Prefs = {
     ACTIVE_TASK_LIST: "activeTaskList",
@@ -33,11 +34,14 @@ class PreferencesStore extends ReduceStore {
     }
 
     getInitialState() {
-        return new Map(getJsonItem(LOCAL_STORAGE_PREFERENCES))
+        return new Map()
     }
 
     reduce(state, action) {
         switch (action.type) {
+            case WindowActions.BOOTSTRAP: {
+                return new Map(getJsonItem(LOCAL_STORAGE_PREFERENCES))
+            }
             case UserActions.RESTORE_PREFERENCES: {
                 return new Map(action.preferences)
             }

@@ -6,6 +6,7 @@ const WindowActions = {
     LAUNCH_NEW_VERSION: "window/launch-new-version",
     VISIBILITY_CHANGE: "window/visibility-change",
     FOCUS_CHANGE: "window/focus-change",
+    BOOTSTRAP: "window/bootstrap",
 }
 
 export default WindowActions

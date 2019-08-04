@@ -20,6 +20,10 @@ ReactDOM.render(<Router history={history}><App /></Router>, document.getElementB
  * From here on down, we're wiring up the environment as an actor on the system.
  */
 
+Dispatcher.dispatch({
+    type: WindowActions.BOOTSTRAP,
+})
+
 window.addEventListener("resize", debounce(() =>
     Dispatcher.dispatch({
         type: WindowActions.RESIZE,
