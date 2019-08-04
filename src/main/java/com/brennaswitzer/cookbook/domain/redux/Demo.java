@@ -3,6 +3,7 @@ package com.brennaswitzer.cookbook.domain.redux;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -118,8 +119,8 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
     }
 
     @Override
-    public List<ItemToPurchase> getShoppingList() {
-        ArrayList<ItemToPurchase> result = new ArrayList<>();
+    public List<AmountOf<GroceryItem>> getShoppingList() {
+        ArrayList<AmountOf<GroceryItem>> result = new ArrayList<>();
         ingredients.forEach(i -> {
             if (i.item instanceof GroceryItem) {
                 result.add(new Purchase(i.quantity, (GroceryItem) i.item));
@@ -178,7 +179,7 @@ class Meal implements RecipeLike, Shoppable {
             return recipe;
         }
 
-        List<ItemToPurchase> getShoppingList() {
+        List<AmountOf<GroceryItem>> getShoppingList() {
             return recipe.getShoppingList()
                     .stream()
                     .map(it -> it.scale(quantity))
@@ -194,7 +195,7 @@ class Meal implements RecipeLike, Shoppable {
 
     private String name; // 4th of July BBQ
     private List<Ref> dishes = new ArrayList<>();
-    private List<ItemToPurchase> extraItems = new ArrayList<>();
+    private List<AmountOf<GroceryItem>> extraItems = new ArrayList<>();
     private String notes;
 
     Meal(String name) {
@@ -207,8 +208,8 @@ class Meal implements RecipeLike, Shoppable {
     }
 
     @Override
-    public List<ItemToPurchase> getShoppingList() {
-        List<ItemToPurchase> result = new LinkedList<>(extraItems);
+    public List<AmountOf<GroceryItem>> getShoppingList() {
+        List<AmountOf<GroceryItem>> result = new LinkedList<>(extraItems);
         dishes.forEach(d ->
                 result.addAll(d.getShoppingList()));
         return result;
@@ -247,19 +248,13 @@ interface RecipeLike extends Named, Shoppable {
     String getName();
 }
 
-//  this is really "requires items" or something?
+// this is really "requires items" or something?
 interface Shoppable {
-    List<ItemToPurchase> getShoppingList();
+    List<AmountOf<GroceryItem>> getShoppingList();
 }
 
 // this is really "required item" or something?
-interface ItemToPurchase extends AmountOf<GroceryItem> {
-    ItemToPurchase scale(double amount);
-
-    ItemToPurchase scale(Quantity quantity);
-}
-
-class Purchase implements ItemToPurchase {
+class Purchase implements AmountOf<GroceryItem> {
     private Quantity quantity;
     private GroceryItem item;
 
@@ -276,15 +271,6 @@ class Purchase implements ItemToPurchase {
     @Override
     public GroceryItem getItem() {
         return item;
-    }
-
-    public ItemToPurchase scale(double amount) {
-        return scale(new Count(amount));
-    }
-
-    @Override
-    public ItemToPurchase scale(Quantity quantity) {
-        return new Purchase(this.quantity.times(quantity), this.item);
     }
 
     @Override
@@ -314,7 +300,7 @@ class Planner implements Shoppable {
             return recipe;
         }
 
-        List<ItemToPurchase> getShoppingList() {
+        List<AmountOf<GroceryItem>> getShoppingList() {
             return recipe.getShoppingList()
                     .stream()
                     .map(it -> it.scale(quantity))
@@ -331,7 +317,7 @@ class Planner implements Shoppable {
     private String name; // week of July 20
     private List<Planner> sections = new ArrayList<>();
     private List<Ref> dishes = new ArrayList<>();
-    private List<ItemToPurchase> extraItems = new ArrayList<>();
+    private List<AmountOf<GroceryItem>> extraItems = new ArrayList<>();
 
     Planner(String name) {
         this.name = name;
@@ -355,8 +341,8 @@ class Planner implements Shoppable {
     }
 
     @Override
-    public List<ItemToPurchase> getShoppingList() {
-        List<ItemToPurchase> result = new LinkedList<>(extraItems);
+    public List<AmountOf<GroceryItem>> getShoppingList() {
+        List<AmountOf<GroceryItem>> result = new LinkedList<>(extraItems);
         sections.forEach(s ->
                 result.addAll(s.getShoppingList()));
         dishes.forEach(d ->
@@ -466,5 +452,25 @@ interface AmountOf<T extends Named> {
     Quantity getQuantity();
 
     T getItem();
+
+    default AmountOf<T> scale(double amount) {
+        return scale(new Count(amount));
+    }
+
+    default AmountOf<T> scale(Quantity quantity) {
+        try {
+            //noinspection unchecked
+            return this.getClass()
+                    .getConstructor(
+                            Quantity.class,
+                            getItem().getClass())
+                    .newInstance(
+                            getQuantity().times(quantity),
+                            getItem());
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
 
