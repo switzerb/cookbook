@@ -47,7 +47,7 @@ public class Demo {
         System.out.println("======================================================================");
         thisWeek.getShoppingList().stream()
                 .collect(Collectors.groupingBy(AmountOf::getItem))
-                .forEach((i, ps) -> System.out.println(new Purchase(ps.stream()
+                .forEach((i, ps) -> System.out.println(new RequiredItem(ps.stream()
                         .map(AmountOf::getQuantity)
                         .reduce(Quantity.ZERO, Quantity::plus), i)));
         System.out.println("======================================================================");
@@ -77,7 +77,7 @@ interface IngredientLike extends Named {
     String getName();
 }
 
-class Recipe implements RecipeLike, Shoppable, IngredientLike {
+class Recipe implements RecipeLike, RequiresItems, IngredientLike {
 
     static class Ref implements AmountOf<IngredientLike> {
         Quantity quantity;
@@ -123,9 +123,9 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
         ArrayList<AmountOf<GroceryItem>> result = new ArrayList<>();
         ingredients.forEach(i -> {
             if (i.item instanceof GroceryItem) {
-                result.add(new Purchase(i.quantity, (GroceryItem) i.item));
-            } else if (i.item instanceof Shoppable) {
-                ((Shoppable) i.item).getShoppingList()
+                result.add(new RequiredItem(i.quantity, (GroceryItem) i.item));
+            } else if (i.item instanceof RequiresItems) {
+                ((RequiresItems) i.item).getShoppingList()
                         .stream()
                         .map(it -> it.scale(i.getQuantity()))
                         .forEach(result::add);
@@ -158,7 +158,7 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
 
 }
 
-class Meal implements RecipeLike, Shoppable {
+class Meal implements RecipeLike, RequiresItems {
 
     static class Ref implements AmountOf<RecipeLike> {
         Quantity quantity;
@@ -221,7 +221,7 @@ class Meal implements RecipeLike, Shoppable {
     }
 
     Meal withExtraItem(Quantity q, GroceryItem item) {
-        extraItems.add(new Purchase(q, item));
+        extraItems.add(new RequiredItem(q, item));
         return this;
     }
 
@@ -244,21 +244,19 @@ class Meal implements RecipeLike, Shoppable {
 
 }
 
-interface RecipeLike extends Named, Shoppable {
+interface RecipeLike extends Named, RequiresItems {
     String getName();
 }
 
-// this is really "requires items" or something?
-interface Shoppable {
+interface RequiresItems {
     List<AmountOf<GroceryItem>> getShoppingList();
 }
 
-// this is really "required item" or something?
-class Purchase implements AmountOf<GroceryItem> {
+class RequiredItem implements AmountOf<GroceryItem> {
     private Quantity quantity;
     private GroceryItem item;
 
-    Purchase(Quantity quantity, GroceryItem item) {
+    RequiredItem(Quantity quantity, GroceryItem item) {
         this.quantity = quantity;
         this.item = item;
     }
@@ -279,7 +277,7 @@ class Purchase implements AmountOf<GroceryItem> {
     }
 }
 
-class Planner implements Shoppable {
+class Planner implements RequiresItems {
 
     static class Ref implements AmountOf<RecipeLike> {
         Quantity quantity;
@@ -336,7 +334,7 @@ class Planner implements Shoppable {
     }
 
     Planner withExtraItem(Quantity q, GroceryItem item) {
-        extraItems.add(new Purchase(q, item));
+        extraItems.add(new RequiredItem(q, item));
         return this;
     }
 
