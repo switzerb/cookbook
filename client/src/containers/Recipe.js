@@ -4,11 +4,12 @@ import { withRouter } from 'react-router-dom'
 import RecipeDetail from '../views/RecipeDetail'
 import RecipeStore from '../data/RecipeStore'
 import LibraryStore from "../data/LibraryStore"
+import PreferencesStore from "../data/PreferencesStore"
 
 export default withRouter(Container.createFunctional(
     (props) => <RecipeDetail {...props}/>,
     () => [
-        LibraryStore,
+        PreferencesStore,
         RecipeStore,
     ],
     (prevState, props) => {
@@ -17,7 +18,7 @@ export default withRouter(Container.createFunctional(
         const recipeLO = LibraryStore.getRecipeById(id)
         return {
             recipeLO,
-            staged: LibraryStore.isStaged(id),
+            staged: PreferencesStore.isStaged(id),
         }
     },
     { withProps: true }
