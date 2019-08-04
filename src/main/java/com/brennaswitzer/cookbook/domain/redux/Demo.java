@@ -159,7 +159,7 @@ class Recipe implements RecipeLike, Shoppable, IngredientLike {
 
 class Meal implements RecipeLike, Shoppable {
 
-    static class Ref implements AmountOf<RecipeLike>, Shoppable {
+    static class Ref implements AmountOf<RecipeLike> {
         Quantity quantity;
         RecipeLike recipe;
 
@@ -178,8 +178,7 @@ class Meal implements RecipeLike, Shoppable {
             return recipe;
         }
 
-        @Override
-        public List<ItemToPurchase> getShoppingList() {
+        List<ItemToPurchase> getShoppingList() {
             return recipe.getShoppingList()
                     .stream()
                     .map(it -> it.scale(quantity))
@@ -296,7 +295,7 @@ class Purchase implements ItemToPurchase {
 
 class Planner implements Shoppable {
 
-    static class Ref implements AmountOf<RecipeLike>, Shoppable {
+    static class Ref implements AmountOf<RecipeLike> {
         Quantity quantity;
         RecipeLike recipe;
 
@@ -315,8 +314,7 @@ class Planner implements Shoppable {
             return recipe;
         }
 
-        @Override
-        public List<ItemToPurchase> getShoppingList() {
+        List<ItemToPurchase> getShoppingList() {
             return recipe.getShoppingList()
                     .stream()
                     .map(it -> it.scale(quantity))
