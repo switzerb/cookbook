@@ -7,8 +7,9 @@ import java.util.List;
 public class RecipeAction {
 
     public enum Type {
-        ASSEMBLE_SHOPPING_LIST,
         DISSECT_RAW_INGREDIENT,
+        PREVIEW_SHOPPING_LIST,
+        ASSEMBLE_SHOPPING_LIST,
     }
 
     private Type type;
@@ -51,15 +52,18 @@ public class RecipeAction {
         this.additionalRecipeIds = additionalRecipeIds;
     }
 
-    public void execute(Long recipeId, RecipeService service) {
+    public Object execute(Long recipeId, RecipeService service) {
         switch (getType()) {
-            case ASSEMBLE_SHOPPING_LIST:
-                service.assembleShoppingList(recipeId, additionalRecipeIds, getListId(), true);
-                break;
             case DISSECT_RAW_INGREDIENT:
                 service.recordDissection(dissection);
-                break;
+                return null;
+            case PREVIEW_SHOPPING_LIST:
+                return service.previewShoppingList(recipeId, additionalRecipeIds);
+            case ASSEMBLE_SHOPPING_LIST:
+                service.assembleShoppingList(recipeId, additionalRecipeIds, getListId(), true);
+                return null;
         }
+        throw new IllegalStateException("Unregcognized RecipeAction: " + getType());
     }
 
 }

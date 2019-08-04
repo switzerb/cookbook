@@ -109,11 +109,12 @@ public class RecipeController {
     }
 
     @PostMapping("/{id}/_actions")
-    public void performAction(
+    @ResponseBody
+    public Object performAction(
             @PathVariable("id") Long id,
             @RequestBody RecipeAction action
     ) {
-        action.execute(id, recipeService);
+        return action.execute(id, recipeService);
     }
 
 }

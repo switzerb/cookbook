@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,15 +59,35 @@ public class RecipeService {
         recipeRepository.deleteById(id);
     }
 
+    public ShoppingList buildShoppingList(AggregateIngredient agg) {
+        ShoppingList l = new ShoppingList();
+        l.addAllPantryItems(agg);
+        // todo: make this user specific
+        l.resetItemOrder(new MagicalListItemStatsComparator(jdbcTmpl));
+        return l;
+    }
+
+    public List<String> previewShoppingList(Long recipeId, List<Long> additionalRecipeIds) {
+        Recipe r = aggregateRecipes(recipeId, additionalRecipeIds);
+        ShoppingList l = buildShoppingList(r);
+        LinkedList<String> result = new LinkedList<>();
+        // ingredient items
+        l.getItems().forEach(it -> result.add(it.toString()));
+        // raw items
+        r.assembleRawIngredientRefs().forEach(ref -> {
+                String raw = ref.getRaw().trim();
+                if (raw.isEmpty()) return;
+                result.add(raw);
+        });
+        return result;
+    }
+
     public void assembleShoppingList(
             AggregateIngredient agg,
             Task list,
             boolean withHeading
     ) {
-        ShoppingList l = new ShoppingList();
-        l.addAllPantryItems(agg);
-        // todo: make this user specific
-        l.resetItemOrder(new MagicalListItemStatsComparator(jdbcTmpl));
+        ShoppingList l = buildShoppingList(agg);
         entityManager.persist(l);
         if (withHeading) {
             l.createTasks(agg.getName(), list);
@@ -82,6 +103,11 @@ public class RecipeService {
     }
 
     public void assembleShoppingList(Long recipeId, List<Long> additionalRecipeIds, Long listId, boolean withHeading) {
+        Recipe r = aggregateRecipes(recipeId, additionalRecipeIds);
+        assembleShoppingList(r, taskRepository.getOne(listId), withHeading);
+    }
+
+    private Recipe aggregateRecipes(Long recipeId, List<Long> additionalRecipeIds) {
         Recipe r;
         if (additionalRecipeIds == null || additionalRecipeIds.isEmpty()) {
             // simple case - a single recipe
@@ -93,7 +119,7 @@ public class RecipeService {
             additionalRecipeIds.forEach(id ->
                     r.addIngredient(recipeRepository.findById(id).get()));
         }
-        assembleShoppingList(r, taskRepository.getOne(listId), withHeading);
+        return r;
     }
 
     @EventListener
