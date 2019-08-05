@@ -45,7 +45,7 @@ public class Demo {
         System.out.println("======================================================================");
         System.out.println(thisWeek);
         System.out.println("======================================================================");
-        thisWeek.getShoppingList().stream()
+        thisWeek.getGroceryList().stream()
                 .collect(Collectors.groupingBy(AmountOf::getItem))
                 .forEach((i, ps) -> System.out.println(new RequiredItem(ps.stream()
                         .map(AmountOf::getQuantity)
@@ -77,7 +77,7 @@ interface ItemInRecipe extends Named {
     String getName();
 }
 
-class Recipe implements ItemInPlan, RequiresItems, ItemInRecipe {
+class Recipe implements ItemInPlan, RequiresGroceries, ItemInRecipe {
 
     static class Ref implements AmountOf<ItemInRecipe> {
         Quantity quantity;
@@ -120,13 +120,13 @@ class Recipe implements ItemInPlan, RequiresItems, ItemInRecipe {
     }
 
     @Override
-    public List<AmountOf<GroceryItem>> getShoppingList() {
+    public List<AmountOf<GroceryItem>> getGroceryList() {
         ArrayList<AmountOf<GroceryItem>> result = new ArrayList<>();
         ingredients.forEach(i -> {
             if (i.item instanceof GroceryItem) {
                 result.add(new RequiredItem(i.quantity, (GroceryItem) i.item));
-            } else if (i.item instanceof RequiresItems) {
-                ((RequiresItems) i.item).getShoppingList()
+            } else if (i.item instanceof RequiresGroceries) {
+                ((RequiresGroceries) i.item).getGroceryList()
                         .stream()
                         .map(it -> it.scale(i.getQuantity()))
                         .forEach(result::add);
@@ -159,7 +159,7 @@ class Recipe implements ItemInPlan, RequiresItems, ItemInRecipe {
 
 }
 
-class Meal implements ItemInPlan, RequiresItems {
+class Meal implements ItemInPlan, RequiresGroceries {
 
     static class Ref implements AmountOf<ItemInPlan> {
         Quantity quantity;
@@ -182,7 +182,7 @@ class Meal implements ItemInPlan, RequiresItems {
         }
 
         List<AmountOf<GroceryItem>> getShoppingList() {
-            return recipe.getShoppingList()
+            return recipe.getGroceryList()
                     .stream()
                     .map(it -> it.scale(quantity))
                     .collect(Collectors.toList());
@@ -210,7 +210,7 @@ class Meal implements ItemInPlan, RequiresItems {
     }
 
     @Override
-    public List<AmountOf<GroceryItem>> getShoppingList() {
+    public List<AmountOf<GroceryItem>> getGroceryList() {
         List<AmountOf<GroceryItem>> result = new LinkedList<>(extraItems);
         dishes.forEach(d ->
                 result.addAll(d.getShoppingList()));
@@ -246,12 +246,12 @@ class Meal implements ItemInPlan, RequiresItems {
 
 }
 
-interface ItemInPlan extends Named, RequiresItems {
+interface ItemInPlan extends Named, RequiresGroceries {
     String getName();
 }
 
-interface RequiresItems {
-    List<AmountOf<GroceryItem>> getShoppingList();
+interface RequiresGroceries {
+    List<AmountOf<GroceryItem>> getGroceryList();
 }
 
 class RequiredItem implements AmountOf<GroceryItem> {
@@ -280,7 +280,7 @@ class RequiredItem implements AmountOf<GroceryItem> {
     }
 }
 
-class Plan implements RequiresItems {
+class Plan implements RequiresGroceries {
 
     static class Ref implements AmountOf<ItemInPlan> {
         Quantity quantity;
@@ -303,7 +303,7 @@ class Plan implements RequiresItems {
         }
 
         List<AmountOf<GroceryItem>> getShoppingList() {
-            return recipe.getShoppingList()
+            return recipe.getGroceryList()
                     .stream()
                     .map(it -> it.scale(quantity))
                     .collect(Collectors.toList());
@@ -343,10 +343,10 @@ class Plan implements RequiresItems {
     }
 
     @Override
-    public List<AmountOf<GroceryItem>> getShoppingList() {
+    public List<AmountOf<GroceryItem>> getGroceryList() {
         List<AmountOf<GroceryItem>> result = new LinkedList<>(extraItems);
         sections.forEach(s ->
-                result.addAll(s.getShoppingList()));
+                result.addAll(s.getGroceryList()));
         dishes.forEach(d ->
                 result.addAll(d.getShoppingList()));
         return result;
