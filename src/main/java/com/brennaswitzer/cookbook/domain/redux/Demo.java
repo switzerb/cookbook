@@ -55,6 +55,48 @@ public class Demo {
 
 }
 
+interface Named {
+    String getName();
+}
+
+interface ItemInRecipe extends Named {
+    String getName();
+}
+
+interface ItemInPlan extends Named, RequiresGroceries {
+}
+
+interface RequiresGroceries {
+    List<AmountOf<GroceryItem>> getGroceryList();
+}
+
+// implementations MUST provide a public (Quantity, T) constructor
+interface AmountOf<T extends Named> {
+    Quantity getQuantity();
+
+    T getItem();
+
+    default AmountOf<T> scale(double amount) {
+        return scale(new Count(amount));
+    }
+
+    default AmountOf<T> scale(Quantity quantity) {
+        try {
+            //noinspection unchecked
+            return this.getClass()
+                    .getConstructor(
+                            Quantity.class,
+                            getItem().getClass())
+                    .newInstance(
+                            getQuantity().times(quantity),
+                            getItem());
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+}
+
 class GroceryItem implements ItemInRecipe {
     private String name; // orange juice
 
@@ -73,8 +115,30 @@ class GroceryItem implements ItemInRecipe {
 
 }
 
-interface ItemInRecipe extends Named {
-    String getName();
+class RequiredItem implements AmountOf<GroceryItem> {
+    private Quantity quantity;
+    private GroceryItem item;
+
+    @SuppressWarnings("WeakerAccess")
+    public RequiredItem(Quantity quantity, GroceryItem item) {
+        this.quantity = quantity;
+        this.item = item;
+    }
+
+    @Override
+    public Quantity getQuantity() {
+        return quantity;
+    }
+
+    @Override
+    public GroceryItem getItem() {
+        return item;
+    }
+
+    @Override
+    public String toString() {
+        return quantity + " " + item;
+    }
 }
 
 class Recipe implements ItemInPlan, RequiresGroceries, ItemInRecipe {
@@ -197,7 +261,7 @@ class Meal implements ItemInPlan, RequiresGroceries {
 
     private String name; // 4th of July BBQ
     private List<Ref> dishes = new ArrayList<>();
-    private List<AmountOf<GroceryItem>> extraItems = new ArrayList<>();
+    private List<RequiredItem> extraItems = new ArrayList<>();
     private String notes;
 
     Meal(String name) {
@@ -246,40 +310,6 @@ class Meal implements ItemInPlan, RequiresGroceries {
 
 }
 
-interface ItemInPlan extends Named, RequiresGroceries {
-    String getName();
-}
-
-interface RequiresGroceries {
-    List<AmountOf<GroceryItem>> getGroceryList();
-}
-
-class RequiredItem implements AmountOf<GroceryItem> {
-    private Quantity quantity;
-    private GroceryItem item;
-
-    @SuppressWarnings("WeakerAccess")
-    public RequiredItem(Quantity quantity, GroceryItem item) {
-        this.quantity = quantity;
-        this.item = item;
-    }
-
-    @Override
-    public Quantity getQuantity() {
-        return quantity;
-    }
-
-    @Override
-    public GroceryItem getItem() {
-        return item;
-    }
-
-    @Override
-    public String toString() {
-        return quantity + " " + item;
-    }
-}
-
 class Plan implements RequiresGroceries {
 
     static class Ref implements AmountOf<ItemInPlan> {
@@ -319,7 +349,7 @@ class Plan implements RequiresGroceries {
     private String name; // week of July 20
     private List<Plan> sections = new ArrayList<>();
     private List<Ref> dishes = new ArrayList<>();
-    private List<AmountOf<GroceryItem>> extraItems = new ArrayList<>();
+    private List<RequiredItem> extraItems = new ArrayList<>();
 
     Plan(String name) {
         this.name = name;
@@ -444,36 +474,5 @@ class Count extends Quantity {
     Count(double number) {
         super(number, null);
     }
-}
-
-interface Named {
-    String getName();
-}
-
-// implementations MUST provide a public (Quantity, T) constructor
-interface AmountOf<T extends Named> {
-    Quantity getQuantity();
-
-    T getItem();
-
-    default AmountOf<T> scale(double amount) {
-        return scale(new Count(amount));
-    }
-
-    default AmountOf<T> scale(Quantity quantity) {
-        try {
-            //noinspection unchecked
-            return this.getClass()
-                    .getConstructor(
-                            Quantity.class,
-                            getItem().getClass())
-                    .newInstance(
-                            getQuantity().times(quantity),
-                            getItem());
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }
 
