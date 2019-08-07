@@ -469,6 +469,10 @@ may be "prep" text around the name in a whole host of different configurations.
 In addition, there may be multiple potential repositories to match into (e.g.,
 when adding recipe ingredients, names can match `PantryItem` or `Recipe`).
 
+The ability to textually "force" a substring to be units or name via some sort
+of markup is desired. Markdown-style emphasis for units and quotes for the name
+seem like reasonable starting points. E.g., `1 _rib_ chopped "celery"`.
+
 # Repositories
 
 Each repository needs to have a `fuzzyMatch(String guess)` (or something)
