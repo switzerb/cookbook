@@ -2,15 +2,16 @@ import React from 'react'
 import PropTypes from "prop-types"
 import Dispatcher from '../data/dispatcher'
 import {
-    Button,
-    Form,
-    Input,
-    List,
-    Spin,
+  Button,
+  Form,
+  Input,
+  List,
+  Spin,
 } from "antd"
 import RecipeActions from "../data/RecipeActions"
 import { Recipe } from "../data/RecipeTypes"
 import ElEdit from "./ElEdit"
+import ElementEditor from "./ElementEditor"
 
 const handleUpdate = (e) => {
     const { name: key, value } = e.target
@@ -52,6 +53,9 @@ const RecipeForm = ({draft: lo, onSave, onCancel}) => {
                     onChange={handleUpdate}
                 />
             </Form.Item>
+          <Form.Item>
+            <ElementEditor/>
+          </Form.Item>
             <Form.Item>
                 <List
                     dataSource={draft.ingredients}
