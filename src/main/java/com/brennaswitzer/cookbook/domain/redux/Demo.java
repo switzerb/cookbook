@@ -46,9 +46,9 @@ public class Demo {
         System.out.println(thisWeek);
         System.out.println("======================================================================");
         thisWeek.getGroceryList().stream()
-                .collect(Collectors.groupingBy(AmountOf::getItem))
+                .collect(Collectors.groupingBy(Element::getItem))
                 .forEach((i, ps) -> System.out.println(new RequiredItem(ps.stream()
-                        .map(AmountOf::getQuantity)
+                        .map(Element::getQuantity)
                         .reduce(Quantity.ZERO, Quantity::plus), i)));
         System.out.println("======================================================================");
     }
@@ -60,27 +60,26 @@ interface Named {
 }
 
 interface ItemInRecipe extends Named {
-    String getName();
 }
 
 interface ItemInPlan extends Named, RequiresGroceries {
 }
 
 interface RequiresGroceries {
-    List<AmountOf<GroceryItem>> getGroceryList();
+    List<Element<GroceryItem>> getGroceryList();
 }
 
 // implementations MUST provide a public (Quantity, T) constructor
-interface AmountOf<T extends Named> {
+interface Element<T extends Named> {
     Quantity getQuantity();
 
     T getItem();
 
-    default AmountOf<T> scale(double amount) {
+    default Element<T> scale(double amount) {
         return scale(new Count(amount));
     }
 
-    default AmountOf<T> scale(Quantity quantity) {
+    default Element<T> scale(Quantity quantity) {
         try {
             //noinspection unchecked
             return this.getClass()
@@ -115,7 +114,7 @@ class GroceryItem implements ItemInRecipe {
 
 }
 
-class RequiredItem implements AmountOf<GroceryItem> {
+class RequiredItem implements Element<GroceryItem> {
     private Quantity quantity;
     private GroceryItem item;
 
@@ -143,7 +142,7 @@ class RequiredItem implements AmountOf<GroceryItem> {
 
 class Recipe implements ItemInPlan, RequiresGroceries, ItemInRecipe {
 
-    static class Ref implements AmountOf<ItemInRecipe> {
+    static class Ref implements Element<ItemInRecipe> {
         Quantity quantity;
         ItemInRecipe item;
 
@@ -184,8 +183,8 @@ class Recipe implements ItemInPlan, RequiresGroceries, ItemInRecipe {
     }
 
     @Override
-    public List<AmountOf<GroceryItem>> getGroceryList() {
-        ArrayList<AmountOf<GroceryItem>> result = new ArrayList<>();
+    public List<Element<GroceryItem>> getGroceryList() {
+        ArrayList<Element<GroceryItem>> result = new ArrayList<>();
         ingredients.forEach(i -> {
             if (i.item instanceof GroceryItem) {
                 result.add(new RequiredItem(i.quantity, (GroceryItem) i.item));
@@ -225,7 +224,7 @@ class Recipe implements ItemInPlan, RequiresGroceries, ItemInRecipe {
 
 class Meal implements ItemInPlan, RequiresGroceries {
 
-    static class Ref implements AmountOf<ItemInPlan> {
+    static class Ref implements Element<ItemInPlan> {
         Quantity quantity;
         ItemInPlan recipe;
 
@@ -245,7 +244,7 @@ class Meal implements ItemInPlan, RequiresGroceries {
             return recipe;
         }
 
-        List<AmountOf<GroceryItem>> getShoppingList() {
+        List<Element<GroceryItem>> getShoppingList() {
             return recipe.getGroceryList()
                     .stream()
                     .map(it -> it.scale(quantity))
@@ -274,8 +273,8 @@ class Meal implements ItemInPlan, RequiresGroceries {
     }
 
     @Override
-    public List<AmountOf<GroceryItem>> getGroceryList() {
-        List<AmountOf<GroceryItem>> result = new LinkedList<>(extraItems);
+    public List<Element<GroceryItem>> getGroceryList() {
+        List<Element<GroceryItem>> result = new LinkedList<>(extraItems);
         dishes.forEach(d ->
                 result.addAll(d.getShoppingList()));
         return result;
@@ -312,7 +311,7 @@ class Meal implements ItemInPlan, RequiresGroceries {
 
 class Plan implements RequiresGroceries {
 
-    static class Ref implements AmountOf<ItemInPlan> {
+    static class Ref implements Element<ItemInPlan> {
         Quantity quantity;
         ItemInPlan recipe;
 
@@ -332,7 +331,7 @@ class Plan implements RequiresGroceries {
             return recipe;
         }
 
-        List<AmountOf<GroceryItem>> getShoppingList() {
+        List<Element<GroceryItem>> getShoppingList() {
             return recipe.getGroceryList()
                     .stream()
                     .map(it -> it.scale(quantity))
@@ -373,8 +372,8 @@ class Plan implements RequiresGroceries {
     }
 
     @Override
-    public List<AmountOf<GroceryItem>> getGroceryList() {
-        List<AmountOf<GroceryItem>> result = new LinkedList<>(extraItems);
+    public List<Element<GroceryItem>> getGroceryList() {
+        List<Element<GroceryItem>> result = new LinkedList<>(extraItems);
         sections.forEach(s ->
                 result.addAll(s.getGroceryList()));
         dishes.forEach(d ->
