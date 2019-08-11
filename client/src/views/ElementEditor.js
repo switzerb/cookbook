@@ -9,6 +9,42 @@ import RecipeApi from "../data/RecipeApi"
 function noop() {
 }
 
+const MOCK = {
+  "suggestions": [
+    {
+      "target": {
+        "value": 49,
+        "type": "ITEM",
+        "end": 18,
+        "start": 13
+      },
+      "name": "peanut oil"
+    }
+  ],
+  "ranges": [
+    {
+      "value": 3,
+      "type": "AMOUNT",
+      "end": 0,
+      "start": 0
+    },
+    {
+      "value": 6,
+      "type": "UNIT",
+      "end": 5,
+      "start": 2
+    },
+    {
+      "value": 3,
+      "type": "ITEM",
+      "end": 11,
+      "start": 7
+    }
+  ],
+  "raw": "3 Tbsp Flour"
+}
+
+
 class ElementEditor extends Component<{}> {
   
   constructor(props) {
@@ -17,7 +53,9 @@ class ElementEditor extends Component<{}> {
     this.immediateState = {
       raw: this.props.raw || ''
     }
-    // AMOUNT, UNIT, NEW_UNIT, NEW_ITEM, ITEM there are five types of ranges
+    this.state = {
+      suggestions: []
+    }
   }
   
   componentDidMount() {
@@ -53,43 +91,6 @@ class ElementEditor extends Component<{}> {
   }
   
   requestData = () => {
-  
-    const MOCK = {
-      "suggestions": [
-        {
-          "target": {
-            "value": 49,
-            "type": "ITEM",
-            "end": 18,
-            "start": 13
-          },
-          "name": "peanut oil"
-        }
-      ],
-      "ranges": [
-        {
-          "value": 3,
-          "type": "AMOUNT",
-          "end": 0,
-          "start": 0
-        },
-        {
-          "value": 6,
-          "type": "UNIT",
-          "end": 5,
-          "start": 2
-        },
-        {
-          "value": 3,
-          "type": "ITEM",
-          "end": 11,
-          "start": 7
-        }
-      ],
-      "raw": "3 Tbsp Flour"
-    }
-  
-  
     const raw = this.getRaw()
     RecipeApi.recognizeElement(raw).then( recognized => {
         // transform DOM style here
@@ -98,6 +99,7 @@ class ElementEditor extends Component<{}> {
         }
       }
     )
+    this.setState({suggestions: MOCK.suggestions})
   }
   
   transformStyle(recognized) {
@@ -122,8 +124,15 @@ class ElementEditor extends Component<{}> {
       raw: styled,
       caret: this.caret.getPosition()
     }
-    
     this.forceUpdate()
+  }
+  
+  renderSuggestions() {
+    const { suggestions } = this.state;
+    if(suggestions.length === 0) {
+      return null
+    }
+    return suggestions.map( item => item.name)
   }
   
   getRaw() {
@@ -167,6 +176,7 @@ class ElementEditor extends Component<{}> {
         >
           {<span>{raw}</span>}
         </ContentEditable>
+        { this.renderSuggestions() }
       </div>
     )
   }
