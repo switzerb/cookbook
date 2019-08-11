@@ -53,9 +53,6 @@ const RecipeForm = ({draft: lo, onSave, onCancel}) => {
                     onChange={handleUpdate}
                 />
             </Form.Item>
-          <Form.Item>
-            <ElementEditor/>
-          </Form.Item>
             <Form.Item>
                 <List
                     dataSource={draft.ingredients}
@@ -90,7 +87,13 @@ const RecipeForm = ({draft: lo, onSave, onCancel}) => {
                     footer={hasIngredients && NewIngredient}
                 />
             </Form.Item>
-            <Form.Item>
+          <Form.Item>
+            <List
+              dataSource={draft.ingredients}
+              renderItem={item => <ElementEditor {...item} />}/>
+          </Form.Item>
+  
+          <Form.Item>
                 <TextArea
                     name="directions"
                     placeholder="Recipe Directions"
