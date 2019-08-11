@@ -68,19 +68,25 @@ class ElementEditor extends Component<{}> {
       ],
       "ranges": [
         {
-          "value": 3.5,
+          "value": 3,
           "type": "AMOUNT",
-          "end": 5,
+          "end": 0,
           "start": 0
         },
         {
           "value": 6,
           "type": "UNIT",
-          "end": 12,
-          "start": 6
+          "end": 5,
+          "start": 2
+        },
+        {
+          "value": 3,
+          "type": "ITEM",
+          "end": 11,
+          "start": 7
         }
       ],
-      "raw": "3 1/2 _Tbsp_ glerg"
+      "raw": "3 Tbsp Flour"
     }
   
   
@@ -88,7 +94,7 @@ class ElementEditor extends Component<{}> {
     RecipeApi.recognizeElement(raw).then( recognized => {
         // transform DOM style here
         if (this.getRaw() === recognized.raw) {
-          this.transformStyle(recognized)
+          this.transformStyle(MOCK)
         }
       }
     )
@@ -96,9 +102,13 @@ class ElementEditor extends Component<{}> {
   
   transformStyle(recognized) {
     const { raw, ranges } = recognized;
-  
+    
     const styled = Array.from(raw).map((letter, index) => {
-      const className = "thing"
+      let className = ""
+      const something = ranges.find(range => index >= range.start && index <= range.end)
+      if(something) {
+        className = something.type.toLowerCase()
+      }
       return (
         <span
           // eslint-disable-next-line react/no-array-index-key
@@ -107,13 +117,12 @@ class ElementEditor extends Component<{}> {
         >{letter === ' ' ? '\u00a0' : letter}</span>
       )
     })
-  
-    const props = {
+    
+    this.immediateState = {
       raw: styled,
       caret: this.caret.getPosition()
     }
-  
-    this.immediateState = props
+    
     this.forceUpdate()
   }
   
