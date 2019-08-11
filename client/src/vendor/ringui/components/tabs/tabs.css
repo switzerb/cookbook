@@ -1,0 +1,112 @@
+@import "../global/variables.css";
+
+@value unit from "../global/global.css";
+@value line-shadow: inset 0 -1px 0 0;
+@value selected-line-shadow: inset 0 -3px 0 0;
+
+.tabs {
+  composes: font from "../global/global.css";
+}
+
+.titles {
+  display: inline-block;
+
+  margin-bottom: calc(unit * 2);
+}
+
+.light .titles {
+  box-shadow: line-shadow var(--ring-line-color);
+}
+
+.dark .titles {
+  box-shadow: line-shadow var(--ring-dark-line-color);
+}
+
+.title {
+  composes: font from "../global/global.css";
+
+  position: relative;
+
+  display: inline-block;
+
+  padding: 0;
+
+  cursor: pointer;
+
+  color: inherit;
+
+  border: none;
+  background: none;
+
+  line-height: calc(unit * 4);
+
+  &:hover:not(.selected),
+  &:focus:not(.selected),
+  &:active:not(.selected) {
+    color: var(--ring-link-hover-color);
+    outline-style: none;
+    box-shadow: inset 0 -1px 0 0 var(--ring-link-hover-color);
+  }
+
+  &[disabled] {
+    pointer-events: none;
+  }
+}
+
+.title + .title {
+  margin-left: calc(unit * 3);
+}
+
+.light .title {
+  &[disabled] {
+    color: var(--ring-disabled-color);
+  }
+}
+
+.dark .title {
+  color: var(--ring-dark-secondary-color);
+
+  &[disabled] {
+    color: var(--ring-text-color);
+  }
+}
+
+.selected {
+  cursor: default;
+
+  outline: none;
+  box-shadow: selected-line-shadow var(--ring-text-color);
+
+  font-weight: bold;
+}
+
+.dark .selected {
+  color: var(--ring-dark-text-color);
+  box-shadow: selected-line-shadow var(--ring-main-color);
+}
+
+.visible {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  text-align: center;
+}
+
+.hidden {
+  visibility: hidden;
+
+  font-weight: bold;
+}
+
+.tabCounter {
+  padding-left: 8px;
+
+  color: var(--ring-secondary-color);
+
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 19px; /* prevent jumps in Firefox */
+}

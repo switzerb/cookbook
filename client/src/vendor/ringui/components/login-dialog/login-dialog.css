@@ -1,0 +1,25 @@
+@import "../global/variables.css";
+
+@value unit from "../global/global.css";
+
+.iFrame {
+  overflow: hidden;
+
+  border: none;
+}
+
+.dialogContent {
+  width: auto;
+}
+
+.nonOpaqueLoader {
+  background-color: var(--ring-content-background-color);
+}
+
+.fallbackLinkContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  padding: unit;
+}

@@ -1,0 +1,29 @@
+@import "../global/variables.css";
+
+@value unit from "../global/global.css";
+
+@keyframes rotation-keyframes {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.canvas {
+  display: block;
+
+  margin: calc(unit * 2) auto;
+
+  pointer-events: none;
+}
+
+.animate {
+  animation: rotation-keyframes 36s linear infinite;
+}
+
+.text {
+  text-align: center;
+
+  font-family: var(--ring-font-family);
+  font-size: var(--ring-font-size);
+  line-height: var(--ring-line-height);
+}

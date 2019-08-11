@@ -1,0 +1,90 @@
+@import "../global/variables.css";
+
+@value unit from "../global/global.css";
+
+.container {
+  position: fixed;
+  z-index: var(--ring-overlay-z-index);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  overflow: auto;
+
+  padding: calc(unit * 4) unit;
+
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.content {
+  position: relative;
+
+  width: calc(unit * 58);
+  min-height: calc(unit * 15);
+  max-height: 100%;
+  margin: auto;
+
+  cursor: default;
+  overflow-wrap: break-word;
+
+  & .panel {
+    margin-top: 0;
+    padding-right: calc(unit * 4);
+    padding-left: calc(unit * 4);
+
+    border-top: none;
+
+    background-color: transparent;
+  }
+
+  /* stylelint-disable-next-line selector-max-specificity */
+  & .panel button {
+    margin-right: unit;
+  }
+}
+
+.content.content {
+  box-shadow: 0 2px 16px var(--ring-popup-shadow-color);
+}
+
+.clickableOverlay {
+  cursor: pointer;
+}
+
+.clickableOverlay:hover .closeIcon {
+  color: var(--ring-border-hover-color);
+}
+
+.content:hover .closeIcon {
+  color: var(--ring-icon-color);
+}
+
+.closeButton:hover .closeIcon {
+  color: var(--ring-border-hover-color);
+}
+
+.clickableOverlay:active .closeIcon {
+  color: var(--ring-main-color);
+}
+
+.content:active .closeIcon {
+  color: var(--ring-icon-color);
+}
+
+.closeButton:active .closeIcon {
+  color: var(--ring-main-color);
+}
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: calc(unit * -4);
+}
+
+.bodyWithoutScroll {
+  overflow: hidden;
+
+  height: 100%;
+}

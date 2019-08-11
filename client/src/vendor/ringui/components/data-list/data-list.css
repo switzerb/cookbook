@@ -1,0 +1,99 @@
+@import "../global/variables.css";
+
+@value unit from "../global/global.css";
+@value height, compensate from '../table/table.css';
+
+.dataListWrapper {
+  position: relative;
+}
+
+.dataList {
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.itemContent {
+  padding: 0;
+
+  list-style: none;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+
+  box-sizing: content-box;
+  height: height;
+  padding: 0 calc(unit * 5) compensate 0;
+
+  outline: none;
+
+  @nest .dataList:not(.disabledHover) &:hover {
+    background-color: var(--ring-hover-background-color);
+  }
+
+  &.titleSelected {
+    background-color: var(--ring-selected-background-color);
+  }
+
+  &.titleFocused {
+    background-color: var(--ring-hover-background-color);
+    box-shadow: inset 2px 0 var(--ring-main-color);
+  }
+}
+
+.showMore {
+  padding: 4px 60px;
+
+  color: var(--ring-secondary-color);
+  outline: none;
+
+  font-size: 12px;
+}
+
+.boxes {
+  display: flex;
+
+  min-width: calc(unit * 3);
+}
+
+.checkboxBox,
+.expanderBox {
+  width: calc(unit * 3);
+
+  color: var(--ring-disabled-color);
+}
+
+.expanderBox {
+  cursor: pointer;
+
+  &:hover {
+    color: var(--ring-link-hover-color);
+  }
+}
+
+.collapseIcon {
+  top: calc(0 - compensate);
+  left: compensate;
+}
+
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.showMoreLoader {
+  top: 1px;
+  left: 8px;
+}

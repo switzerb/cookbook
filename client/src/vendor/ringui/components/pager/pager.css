@@ -1,0 +1,21 @@
+@import "../global/variables.css";
+
+@value unit from "../global/global.css";
+
+.pager {
+  user-select: none;
+}
+
+.links {
+  margin-bottom: calc(unit * 2);
+}
+
+.link {
+  display: inline-block;
+
+  margin-right: calc(unit * 2);
+}
+
+.linkDisabled {
+  color: var(--ring-secondary-color);
+}
