@@ -1,12 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Router } from 'react-router-dom'
+import history from "./util/history"
+import App from './App'
 import * as serviceWorker from './serviceWorker'
 import debounce from "./util/debounce"
 import Dispatcher from "./data/dispatcher"
 import WindowActions from "./data/WindowActions"
 import logAction from "./util/logAction"
 import TemporalActions from "./data/TemporalActions"
-import ElementBuilder from "./views/ElementBuilder"
 import RingUI from "./util/ring-ui"
 
 if (process.env.NODE_ENV !== "production") {
@@ -24,10 +26,10 @@ window.ReactDOM = ReactDOM
         Object.entries(window.RingUI)
             .forEach(([key, value]) =>
                 RingUI[key] = value)
-        // ReactDOM.render(<Router history={history}><App /></Router>, document.getElementById('root'))
-        ReactDOM.render(<div style={{
-            margin: "30px",
-        }}><ElementBuilder /></div>, document.getElementById('root'))
+        ReactDOM.render(<Router history={history}><App /></Router>, document.getElementById('root'))
+        // ReactDOM.render(<div style={{
+        //     margin: "30px",
+        // }}><ElementBuilder /></div>, document.getElementById('root'))
     }
     document.head.appendChild(s)
 }
