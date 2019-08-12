@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@jetbrains/icons": "^3.2.1",
     "antd": "3.16.6",
     "axios": "0.18.0",
     "classnames": "2.2.6",

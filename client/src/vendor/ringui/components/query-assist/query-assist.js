@@ -1,17 +1,20 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {findDOMNode} from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import debounce from 'just-debounce-it';
 import classNames from 'classnames';
 import deepEqual from 'deep-equal';
-import searchIcon from '../../icons/search.svg';
-import closeIcon from '../../icons/close.svg';
+import searchIcon from '@jetbrains/icons/search.svg';
+import closeIcon from '@jetbrains/icons/close.svg';
 
 import Icon from '../icon';
 
 import getUID from '../global/get-uid';
 import dataTests from '../global/data-tests';
-import {getRect, preventDefault} from '../global/dom';
+import {
+    getRect,
+    preventDefault,
+} from '../global/dom';
 import Caret from '../caret/caret';
 import ContentEditable from '../contenteditable/contenteditable';
 import PopupMenu from '../popup-menu/popup-menu';
