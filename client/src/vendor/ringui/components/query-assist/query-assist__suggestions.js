@@ -2,7 +2,7 @@ import React from 'react';
 
 import List from '../list/list';
 
-import styles from './query-assist.module.scss';
+import styles from './query-assist.module.css';
 
 const ICON_ID_LENGTH = 44;
 

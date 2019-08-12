@@ -2,15 +2,15 @@
 
 import 'dom4';
 import React from 'react';
-import {findDOMNode} from 'react-dom';
-import {Simulate} from 'react-dom/test-utils';
-import {mount} from 'enzyme';
+import { findDOMNode } from 'react-dom';
+import { Simulate } from 'react-dom/test-utils';
+import { mount } from 'enzyme';
 
 
 import simulateCombo from '../../test-helpers/simulate-combo';
 
 import QueryAssist from './query-assist';
-import styles from './query-assist.module.scss';
+import styles from './query-assist.module.css';
 
 describe('Query Assist', () => {
   const testQuery = 'oooooooooooo';

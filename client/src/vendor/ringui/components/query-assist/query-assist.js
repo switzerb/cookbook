@@ -25,7 +25,7 @@ import Theme from '../global/theme';
 
 import QueryAssistSuggestions from './query-assist__suggestions';
 
-import styles from './query-assist.module.scss';
+import styles from './query-assist.module.css';
 
 const POPUP_COMPENSATION = PopupMenu.ListProps.Dimension.ITEM_PADDING +
   PopupMenu.PopupProps.Dimension.BORDER_WIDTH;
