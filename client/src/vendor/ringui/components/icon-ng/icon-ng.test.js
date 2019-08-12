@@ -3,7 +3,7 @@ import 'dom4';
 import 'angular';
 import 'angular-mocks';
 import {CheckmarkIcon, WarningIcon} from '../icon';
-import styles from '../icon/icon.module.css';
+import styles from '../icon/icon.module.scss';
 
 import Icon from './icon-ng';
 

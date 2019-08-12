@@ -12,7 +12,6 @@ const dataSource = ({query, caret}) => ({
     {start: 3, length: 1, style: 'operator'}
   ],
   suggestions: [{
-    prefix: 'login: ',
     option: 'test',
     suffix: ' ',
     description: '1',
@@ -23,7 +22,6 @@ const dataSource = ({query, caret}) => ({
     completionEnd: query.length,
     group: 'Recipes'
   }, {
-    prefix: 'login: ',
     option: 'test.1',
     suffix: ' ',
     description: '2',
@@ -33,17 +31,6 @@ const dataSource = ({query, caret}) => ({
     completionStart: 0,
     completionEnd: query.length,
     group: 'Ingredients'
-  }, {
-    prefix: 'name: ',
-    option: 'another',
-    suffix: ' ',
-    description: '2',
-    matchingStart: 0,
-    matchingEnd: query.length,
-    caret: 2,
-    completionStart: 0,
-    completionEnd: query.length,
-    group: 'Names'
   }]
 });
 
