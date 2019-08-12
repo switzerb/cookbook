@@ -45,7 +45,7 @@ const parseThatShit = (query, caret, callback) => {
                 continue
             }
             const partials = UNITS.filter(u => u.indexOf(w) === 0)
-            partials.forEach(u => {
+            partials.forEach(u => { // eslint-disable-line no-loop-func
                 unit = u // not really true, but whatever
                 suggestions.push({
                     option: u,
