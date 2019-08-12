@@ -1,10 +1,10 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import dataTests from '../global/data-tests';
 
-import styles from './list.css';
+import styles from './list.module.css';
 
 export default class ListCustom extends PureComponent {
   static propTypes = {

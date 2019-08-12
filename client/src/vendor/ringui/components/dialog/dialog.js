@@ -1,17 +1,17 @@
-import React, {PureComponent} from 'react';
-import {createPortal} from 'react-dom';
+import React, { PureComponent } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import closeIcon from '@jetbrains/icons/close.svg';
 
-import {AdaptiveIsland} from '../island/island';
+import { AdaptiveIsland } from '../island/island';
 import getUID from '../global/get-uid';
 import Shortcuts from '../shortcuts/shortcuts';
 import TabTrap from '../tab-trap/tab-trap';
 import Button from '../button/button';
 
 import ScrollPreventer from './dialog__body-scroll-preventer';
-import styles from './dialog.css';
+import styles from './dialog.module.css';
 
 /**
  * @name Dialog

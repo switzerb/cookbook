@@ -1,8 +1,8 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import styles from './panel.css';
+import styles from './panel.module.css';
 
 /**
  * @name Panel

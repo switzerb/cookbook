@@ -1,8 +1,12 @@
 import React from 'react';
 
 import Day from './day';
-import {dateType, WEEK, weekdays} from './consts';
-import styles from './date-picker.css';
+import {
+    dateType,
+    WEEK,
+    weekdays,
+} from './consts';
+import styles from './date-picker.module.css';
 
 export default function Month(props) {
   const start = props.month;

@@ -7,7 +7,7 @@ import Icon, { Size } from '../icon'
 import Theme from '../global/theme'
 import ClickableLink from '../link/clickableLink'
 
-import styles from './button.css'
+import styles from './button.module.css'
 
 /**
  * @name Button

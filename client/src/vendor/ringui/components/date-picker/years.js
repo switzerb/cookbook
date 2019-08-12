@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-bind */
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import moment from 'moment';
@@ -7,8 +7,13 @@ import moment from 'moment';
 import linearFunction from '../global/linear-function';
 
 
-import styles from './date-picker.css';
-import units, {dateType, DOUBLE, HALF, yearDuration} from './consts';
+import styles from './date-picker.module.css';
+import units, {
+    dateType,
+    DOUBLE,
+    HALF,
+    yearDuration,
+} from './consts';
 
 const {yearHeight, calHeight} = units;
 

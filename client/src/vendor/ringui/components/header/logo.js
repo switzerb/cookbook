@@ -1,10 +1,10 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import Icon, {Size} from '../icon/icon';
+import Icon, { Size } from '../icon/icon';
 
-import styles from './header.css';
+import styles from './header.module.css';
 
 export default class Logo extends PureComponent {
   static Size = Size

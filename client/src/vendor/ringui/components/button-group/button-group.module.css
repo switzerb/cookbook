@@ -11,7 +11,7 @@
 }
 
 .buttonGroup {
-  composes: buttonGroup from "../button-toolbar/button-toolbar.css";
+  composes: buttonGroup from "../button-toolbar/button-toolbar.module.css";
 
   position: relative;
   z-index: 0;

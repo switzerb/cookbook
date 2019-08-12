@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 
-import styles from './button-set.css'
+import styles from './button-set.module.css'
 
 /**
  * @name Button Set

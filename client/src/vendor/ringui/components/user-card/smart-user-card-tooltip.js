@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import LoaderInline from '../loader-inline/loader-inline';
 
 import UserCardTooltip from './tooltip';
-import styles from './user-card.css';
+import styles from './user-card.module.css';
 
 export default class SmartUserCardTooltip extends Component {
   static propTypes = {

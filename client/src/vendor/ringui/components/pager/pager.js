@@ -5,7 +5,7 @@
 /* eslint-disable react/jsx-no-literals */
 /* eslint-disable no-magic-numbers */
 
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import chevronLeftIcon from '@jetbrains/icons/chevron-left.svg';
@@ -19,7 +19,7 @@ import memoize from '../global/memoize';
 import Link from '../link/link';
 import Icon from '../icon/icon';
 
-import style from './pager.css';
+import style from './pager.module.css';
 
 export default class Pager extends PureComponent {
   static propTypes = {

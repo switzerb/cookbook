@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import createResizeDetector from 'element-resize-detector';
 
 import scheduleRAF from '../global/schedule-raf';
 
-import styles from './island.css';
+import styles from './island.module.css';
 
 const scheduleScrollAction = scheduleRAF();
 const noop = () => {};

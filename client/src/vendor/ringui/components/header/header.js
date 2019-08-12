@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import rerenderHOC from '../global/rerender-hoc';
 import Theme from '../global/theme';
 
-import styles from './header.css';
+import styles from './header.module.css';
 
 /**
  * @name Header

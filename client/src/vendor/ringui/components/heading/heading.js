@@ -1,9 +1,9 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import deprecate from 'util-deprecate';
 
-import styles from './heading.css';
+import styles from './heading.module.css';
 
 /**
  * @name Heading

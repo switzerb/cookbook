@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import styles from './group.css';
+import styles from './group.module.css';
 
 /**
  * @name Group

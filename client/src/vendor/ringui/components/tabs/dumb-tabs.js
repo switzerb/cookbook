@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -9,7 +9,7 @@ import dataTests from '../global/data-tests';
 
 import Link from '../link/link';
 
-import styles from './tabs.css';
+import styles from './tabs.module.css';
 
 import Tab from './tab';
 

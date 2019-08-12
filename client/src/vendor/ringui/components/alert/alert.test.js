@@ -1,12 +1,12 @@
 import React from 'react'
 import {
-  mount,
-  render,
-  shallow
+    mount,
+    render,
+    shallow,
 } from 'enzyme'
 
 import Alert from './alert'
-import styles from './alert.css'
+import styles from './alert.module.css'
 
 const TICK = 500;
 

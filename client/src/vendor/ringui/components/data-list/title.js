@@ -1,11 +1,11 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import focusSensorHOC from '../global/focus-sensor-hoc';
 import Checkbox from '../checkbox/checkbox';
 
-import styles from './data-list.css';
+import styles from './data-list.module.css';
 
 
 class Title extends PureComponent {

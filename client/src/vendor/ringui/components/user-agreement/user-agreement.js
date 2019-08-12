@@ -2,16 +2,19 @@
  * @name User Agreement
  */
 
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Dialog from '../dialog/dialog';
-import {Content, Header} from '../island/island';
+import {
+    Content,
+    Header,
+} from '../island/island';
 import Panel from '../panel/panel';
 import Button from '../button/button';
 import Markdown from '../markdown/markdown';
 
-import style from './user-agreement.css';
+import style from './user-agreement.module.css';
 
 export default class UserAgreement extends PureComponent {
   static propTypes = {

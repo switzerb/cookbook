@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import {interpolateLinear} from '../global/linear-function';
+import { interpolateLinear } from '../global/linear-function';
 
-import styles from './island.css';
+import styles from './island.module.css';
 
 const Start = {
   FONT_SIZE: 24,

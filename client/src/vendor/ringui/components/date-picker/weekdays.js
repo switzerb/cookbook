@@ -2,8 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 
-import {weekdays} from './consts';
-import styles from './date-picker.css';
+import { weekdays } from './consts';
+import styles from './date-picker.module.css';
 
 export default function Weekdays() {
   const days = Object.keys(weekdays).

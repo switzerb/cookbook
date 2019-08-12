@@ -1,10 +1,13 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {
+    mount,
+    shallow,
+} from 'enzyme';
 
 import ButtonToolbar from '../button-toolbar/button-toolbar';
 
 import Pager from './pager';
-import styles from './pager.css';
+import styles from './pager.module.css';
 
 describe('Pager', () => {
   const props = {total: 100, currentPage: 1, onPageChange: () => {}};

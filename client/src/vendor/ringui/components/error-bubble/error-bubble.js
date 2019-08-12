@@ -1,11 +1,16 @@
-import React, {Children, cloneElement, PureComponent} from 'react';
+import React, {
+    Children,
+    cloneElement,
+    PureComponent,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Popup from '../popup/popup';
-import {Directions} from '../popup/position';
+import { Directions } from '../popup/position';
 
-import styles from './error-bubble.css';
+import styles from './error-bubble.module.css';
+
 /**
  * @name Error Bubble
  */

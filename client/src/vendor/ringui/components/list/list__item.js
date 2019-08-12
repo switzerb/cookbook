@@ -1,13 +1,13 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import dataTests from '../global/data-tests';
-import Avatar, {Size as AvatarSize} from '../avatar/avatar';
+import Avatar, { Size as AvatarSize } from '../avatar/avatar';
 import Checkbox from '../checkbox/checkbox';
 import Icon from '../icon';
 
-import styles from './list.css';
+import styles from './list.module.css';
 
 /**
  * @constructor

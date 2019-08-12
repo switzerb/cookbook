@@ -1,12 +1,12 @@
 import React from 'react'
 import {
-  mount,
-  render,
-  shallow
+    mount,
+    render,
+    shallow,
 } from 'enzyme'
 
 import Badge from './badge'
-import style from './badge.css'
+import style from './badge.module.css'
 
 describe('Badge', () => {
   const shallowBadge = (params, content) => shallow(<Badge {...params}>{content}</Badge>);

@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
 import classNames from 'classnames';
@@ -10,7 +10,7 @@ import trivialTemplateTag from '../global/trivial-template-tag';
 import Code from './code';
 import Link from './link';
 import Heading from './heading';
-import styles from './markdown.css';
+import styles from './markdown.module.css';
 
 /**
   * @name Markdown

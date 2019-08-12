@@ -2,7 +2,7 @@
 
 .link {
   & {
-    composes: link from "../alert/alert.css"; /* To override link stiles inside alert */
+    composes: link from "../alert/alert.module.css"; /* To override link stiles inside alert */
 
     cursor: pointer;
     transition: color var(--ring-fast-ease);

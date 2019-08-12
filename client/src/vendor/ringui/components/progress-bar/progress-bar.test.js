@@ -1,12 +1,15 @@
 /* eslint-disable react/no-find-dom-node */
 import React from 'react';
-import {findDOMNode} from 'react-dom';
-import {shallow, mount} from 'enzyme';
+import { findDOMNode } from 'react-dom';
+import {
+    mount,
+    shallow,
+} from 'enzyme';
 
 import Theme from '../global/theme';
 
 import ProgressBar from './progress-bar';
-import styles from './progress-bar.css';
+import styles from './progress-bar.module.css';
 
 describe('Progress Bar', () => {
   const shallowProgressBar = props => shallow(<ProgressBar {...props}/>);

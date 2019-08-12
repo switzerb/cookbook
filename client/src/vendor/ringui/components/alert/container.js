@@ -1,13 +1,13 @@
 import React, {
-  Children,
-  cloneElement,
-  PureComponent
+    Children,
+    cloneElement,
+    PureComponent,
 } from 'react'
 import { createPortal } from 'react-dom'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 
-import styles from './container.css'
+import styles from './container.module.css'
 
 /**
  * @name Alert Container

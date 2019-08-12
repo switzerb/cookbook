@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -9,7 +9,7 @@ import Caret from '../caret/caret';
 import memoize from '../global/memoize';
 import rerenderHOC from '../global/rerender-hoc';
 
-import styles from './tags-input.css';
+import styles from './tags-input.module.css';
 
 function noop() {}
 

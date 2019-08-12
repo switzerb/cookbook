@@ -5,7 +5,7 @@ import checkmarkIcon from '@jetbrains/icons/checkmark.svg'
 
 import Icon from '../icon/icon'
 
-import styles from './checkbox.css'
+import styles from './checkbox.module.css'
 
 /**
  * @name Checkbox

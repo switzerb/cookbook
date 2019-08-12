@@ -1,8 +1,8 @@
 import 'dom4';
 import React from 'react';
-import {mount} from 'enzyme';
+import { mount } from 'enzyme';
 
-import islandStyles from '../island/island.css';
+import islandStyles from '../island/island.module.css';
 
 import Confirm from './confirm';
 

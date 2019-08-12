@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import gift from '@jetbrains/icons/gift.svg';
@@ -7,7 +7,7 @@ import Popup from '../popup/popup';
 import Icon from '../icon/icon';
 import Button from '../button/button';
 
-import styles from './message.css';
+import styles from './message.module.css';
 
 /**
   * @name Message

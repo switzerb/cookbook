@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sortableIcon from '@jetbrains/icons/unsorted-10px.svg';
@@ -6,7 +6,7 @@ import sortedIcon from '@jetbrains/icons/chevron-10px.svg';
 
 import Icon from '../icon';
 
-import style from './table.css';
+import style from './table.module.css';
 
 export default class HeaderCell extends PureComponent {
   static propTypes = {

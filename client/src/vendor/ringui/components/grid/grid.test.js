@@ -1,8 +1,15 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {
+    mount,
+    shallow,
+} from 'enzyme';
 
-import styles from './grid.css';
-import {Col, Grid, Row} from './grid';
+import styles from './grid.module.css';
+import {
+    Col,
+    Grid,
+    Row,
+} from './grid';
 
 describe('Grid', () => {
   const shallowGrid = props => shallow(<Grid {...props}/>);

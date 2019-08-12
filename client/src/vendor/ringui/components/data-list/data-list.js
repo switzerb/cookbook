@@ -2,7 +2,7 @@
   * @name Data List
   */
 
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -13,9 +13,9 @@ import getUID from '../global/get-uid';
 import Shortcuts from '../shortcuts/shortcuts';
 import Loader from '../loader/loader';
 
-import Item, {moreLessButtonStates} from './item';
+import Item, { moreLessButtonStates } from './item';
 
-import styles from './data-list.css';
+import styles from './data-list.module.css';
 
 
 // eslint-disable-next-line react/no-deprecated

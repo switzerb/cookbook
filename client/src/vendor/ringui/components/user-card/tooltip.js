@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -6,7 +6,7 @@ import Dropdown from '../dropdown/dropdown';
 import Popup from '../popup/popup';
 
 import UserCard from './card';
-import styles from './user-card.css';
+import styles from './user-card.module.css';
 
 const DEFAULT_TIMEOUT = 300;
 

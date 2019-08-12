@@ -1,8 +1,11 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {
+    mount,
+    shallow,
+} from 'enzyme';
 
 import Toggle from './toggle';
-import styles from './toggle.css';
+import styles from './toggle.module.css';
 
 describe('Toggle', () => {
   const shallowToggle = props => shallow(<Toggle {...props}/>);

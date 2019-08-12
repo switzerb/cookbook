@@ -1,10 +1,14 @@
 import React from 'react';
-import {mount, shallow, render} from 'enzyme';
+import {
+    mount,
+    render,
+    shallow,
+} from 'enzyme';
 
 import sniffer from '../global/sniffer';
 
 import DatePicker from './date-picker';
-import styles from './date-picker.css';
+import styles from './date-picker.module.css';
 
 describe('Date Picker', () => {
   const shallowDatePicker = params => shallow(<DatePicker {...params}/>);

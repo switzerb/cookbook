@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {Waypoint} from 'react-waypoint';
+import { Waypoint } from 'react-waypoint';
 
-import styles from './content-layout.css';
+import styles from './content-layout.module.css';
 
 const ABOVE = 'above';
 const INSIDE = 'inside';

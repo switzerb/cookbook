@@ -7,8 +7,14 @@ import linearFunction from '../global/linear-function';
 
 import Month from './month';
 import MonthNames from './month-names';
-import styles from './date-picker.css';
-import units, {dateType, DOUBLE, HALF, WEEK, weekdays} from './consts';
+import styles from './date-picker.module.css';
+import units, {
+    dateType,
+    DOUBLE,
+    HALF,
+    WEEK,
+    weekdays,
+} from './consts';
 
 const {unit, cellSize, calHeight} = units;
 

@@ -2,10 +2,13 @@
  * @name Table
  */
 
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {arrayMove, sortableContainer} from 'react-sortable-hoc';
+import {
+    arrayMove,
+    sortableContainer,
+} from 'react-sortable-hoc';
 
 import focusSensorHOC from '../global/focus-sensor-hoc';
 import getUID from '../global/get-uid';
@@ -14,7 +17,7 @@ import Loader from '../loader/loader';
 
 import Selection from './selection';
 import Header from './header';
-import style from './table.css';
+import style from './table.module.css';
 import DraggableRow from './draggable-row';
 import selectionShortcutsHOC from './selection-shortcuts-hoc';
 import disableHoverHOC from './disable-hover-hoc';

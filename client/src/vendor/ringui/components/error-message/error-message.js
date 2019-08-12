@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Icon from '../icon';
-import {Size} from '../icon/icon__constants';
+import { Size } from '../icon/icon__constants';
 
-import styles from './error-message.css';
+import styles from './error-message.module.css';
 
 
 /**

@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Popup from '../popup/popup';
-import {Listeners} from '../global/dom';
+import { Listeners } from '../global/dom';
 import dataTests from '../global/data-tests';
 
-import styles from './tooltip.css';
+import styles from './tooltip.module.css';
 
 /**
  * @name Tooltip

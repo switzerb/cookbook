@@ -1,9 +1,12 @@
-import React, {cloneElement, Component} from 'react';
+import React, {
+    cloneElement,
+    Component,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Sidebar from './sidebar';
-import styles from './content-layout.css';
+import styles from './content-layout.module.css';
 
 /**
  * @name Content Layout

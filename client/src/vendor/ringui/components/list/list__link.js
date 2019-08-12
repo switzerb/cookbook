@@ -1,11 +1,14 @@
-import React, {Component, PureComponent} from 'react';
+import React, {
+    Component,
+    PureComponent,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import Link, {linkHOC} from '../link/link';
+import Link, { linkHOC } from '../link/link';
 import dataTests from '../global/data-tests';
 
-import styles from './list.css';
+import styles from './list.module.css';
 
 /**
  * @constructor

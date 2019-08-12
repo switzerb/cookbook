@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import deprecate from 'util-deprecate';
 
-import styles from './text.css';
+import styles from './text.module.css';
 
 /**
  * @name Text

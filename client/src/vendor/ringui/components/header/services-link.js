@@ -1,9 +1,9 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Link from '../link/link';
 
-import styles from './services.css';
+import styles from './services.module.css';
 
 export default class ServicesLink extends PureComponent {
   static propTypes = {

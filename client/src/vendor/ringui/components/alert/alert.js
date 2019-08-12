@@ -13,7 +13,7 @@ import Loader from '../loader-inline/loader-inline'
 import { getRect } from '../global/dom'
 import dataTests from '../global/data-tests'
 
-import styles from './alert.css'
+import styles from './alert.module.css'
 
 export const ANIMATION_TIME = 500;
 

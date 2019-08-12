@@ -1,7 +1,7 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {sortableHandle} from 'react-sortable-hoc';
+import { sortableHandle } from 'react-sortable-hoc';
 import chevronRightIcon from '@jetbrains/icons/chevron-right.svg';
 import chevronDownIcon from '@jetbrains/icons/chevron-down.svg';
 import dragIcon from '@jetbrains/icons/drag.svg';
@@ -12,7 +12,7 @@ import Button from '../button/button';
 import Tooltip from '../tooltip/tooltip';
 
 import Cell from './cell';
-import style from './table.css';
+import style from './table.module.css';
 
 const DragHandle = sortableHandle(({alwaysShowDragHandle}) => {
   const classes = classNames(style.dragHandle, {

@@ -1,10 +1,10 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Theme from '../global/theme';
 
-import styles from './progress-bar.css';
+import styles from './progress-bar.module.css';
 
 /**
  * @name Progress Bar

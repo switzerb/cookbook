@@ -1,6 +1,6 @@
 import { Simulate } from 'react-dom/test-utils'
 
-import styles from '../auth-dialog/auth-dialog.css'
+import styles from '../auth-dialog/auth-dialog.module.css'
 
 import authDialog from './auth-dialog-service'
 

@@ -1,12 +1,12 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import Avatar, {Size} from '../avatar/avatar';
+import Avatar, { Size } from '../avatar/avatar';
 import Link from '../link/link';
-import badgeStyles from '../badge/badge.css';
+import badgeStyles from '../badge/badge.module.css';
 
-import styles from './user-card.css';
+import styles from './user-card.module.css';
 
 export default class UserCard extends PureComponent {
   static propTypes = {

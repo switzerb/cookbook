@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-literals */
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import chevronRightIcon from '@jetbrains/icons/chevron-right.svg';
 import chevronDownIcon from '@jetbrains/icons/chevron-down.svg';
@@ -12,7 +12,7 @@ import Icon from '../icon';
 
 import Title from './title';
 
-import styles from './data-list.css';
+import styles from './data-list.module.css';
 
 export const moreLessButtonStates = {
   UNUSED: 0,

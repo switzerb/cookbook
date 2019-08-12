@@ -1,11 +1,11 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import Theme from '../global/theme';
 import dataTests from '../global/data-tests';
 
-import styles from './loader-inline.css';
+import styles from './loader-inline.module.css';
 import injectStyles from './inject-styles';
 
 /**

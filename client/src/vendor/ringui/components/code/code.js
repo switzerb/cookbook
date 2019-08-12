@@ -6,7 +6,7 @@ import normalizeIndent from '../global/normalize-indent'
 import trivialTemplateTag from '../global/trivial-template-tag'
 
 import highlight from './highlight'
-import styles from './code.css'
+import styles from './code.module.css'
 
 function noop() {}
 

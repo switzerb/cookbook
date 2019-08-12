@@ -3,14 +3,17 @@
  */
 /* eslint-disable react/prop-types */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import searchIcon from '@jetbrains/icons/search.svg';
 
 import Icon from '../icon/icon';
 
 import Popup from '../popup/popup';
-import {DEFAULT_DIRECTIONS, maxHeightForDirection} from '../popup/position';
+import {
+    DEFAULT_DIRECTIONS,
+    maxHeightForDirection,
+} from '../popup/position';
 import List from '../list/list';
 import LoaderInline from '../loader-inline/loader-inline';
 import shortcutsHOC from '../shortcuts/shortcuts-hoc';
@@ -21,7 +24,7 @@ import Caret from '../caret/caret';
 import Shortcuts from '../shortcuts/shortcuts';
 
 import SelectFilter from './select__filter';
-import styles from './select-popup.css';
+import styles from './select-popup.module.css';
 
 const INPUT_MARGIN_COMPENSATION = -14;
 const FILTER_HEIGHT = 35;

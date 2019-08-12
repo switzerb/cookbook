@@ -1,11 +1,11 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import closeIcon from '@jetbrains/icons/close.svg';
 
 import Icon from '../icon';
 
-import styles from './tag.css';
+import styles from './tag.module.css';
 
 /**
  * @name Tag

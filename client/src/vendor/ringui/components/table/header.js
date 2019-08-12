@@ -1,11 +1,11 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {Waypoint} from 'react-waypoint';
+import { Waypoint } from 'react-waypoint';
 
 import Checkbox from '../checkbox/checkbox';
 
-import style from './table.css';
+import style from './table.module.css';
 import HeaderCell from './header-cell';
 
 export default class Header extends PureComponent {

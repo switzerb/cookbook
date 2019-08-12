@@ -1,9 +1,12 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {
+    mount,
+    shallow,
+} from 'enzyme';
 import VirtualizedList from 'react-virtualized/dist/es/List';
 
 import getUID from '../global/get-uid';
-import Icon, {CheckmarkIcon} from '../icon';
+import Icon, { CheckmarkIcon } from '../icon';
 
 import List from './list';
 import ListItem from './list__item';
@@ -11,7 +14,7 @@ import ListCustom from './list__custom';
 import ListLink from './list__link';
 import ListTitle from './list__title';
 import ListSeparator from './list__separator';
-import styles from './list.css';
+import styles from './list.module.css';
 
 describe('List', () => {
   const Type = List.ListProps.Type;

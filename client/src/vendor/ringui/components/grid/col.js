@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import styles from './grid.css';
+import styles from './grid.module.css';
 
 const ModifierType = PropTypes.oneOfType([PropTypes.number, PropTypes.bool]);
 

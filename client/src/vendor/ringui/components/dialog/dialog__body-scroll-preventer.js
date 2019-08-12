@@ -1,6 +1,6 @@
 import scrollbarWidth from 'scrollbar-width';
 
-import {bodyWithoutScroll} from './dialog.css';
+import { bodyWithoutScroll } from './dialog.module.css';
 
 let isPrevented = false;
 let previousBodyWidth = null;

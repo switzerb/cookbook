@@ -2,28 +2,31 @@
  * @name Popup
  */
 
-import React, {PureComponent} from 'react';
-import {createPortal} from 'react-dom';
+import React, { PureComponent } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import 'dom4';
 
 import getUID from '../global/get-uid';
 import scheduleRAF from '../global/schedule-raf';
-import {Listeners, getStyles} from '../global/dom';
+import {
+    getStyles,
+    Listeners,
+} from '../global/dom';
 import Shortcuts from '../shortcuts/shortcuts';
 import dataTests from '../global/data-tests';
 
 import position, {
-  DEFAULT_DIRECTIONS,
-  Dimension,
-  Directions,
-  Display,
-  MaxHeight,
-  MinWidth,
-  positionPropKeys
+    DEFAULT_DIRECTIONS,
+    Dimension,
+    Directions,
+    Display,
+    MaxHeight,
+    MinWidth,
+    positionPropKeys,
 } from './position';
-import styles from './popup.module.css';
+import styles from './popup.module.module.css';
 
 const stop = e => e.stopPropagation();
 

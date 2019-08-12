@@ -1,8 +1,11 @@
 /* eslint-disable no-magic-numbers, react/no-find-dom-node */
 import React from 'react';
-import {findDOMNode} from 'react-dom';
-import {Simulate} from 'react-dom/test-utils';
-import {shallow, mount} from 'enzyme';
+import { findDOMNode } from 'react-dom';
+import { Simulate } from 'react-dom/test-utils';
+import {
+    mount,
+    shallow,
+} from 'enzyme';
 
 import List from '../list/list';
 import Input from '../input/input';
@@ -10,7 +13,7 @@ import sniffr from '../global/sniffer';
 import simulateCombo from '../../test-helpers/simulate-combo';
 
 import Select from './select';
-import styles from './select.css';
+import styles from './select.module.css';
 
 const isIE11 = sniffr.browser.name === 'ie' && sniffr.browser.versionString === '11.0';
 

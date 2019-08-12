@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 import {
-  encodeURL,
-  isDataURI,
-  parseQueryString
+    encodeURL,
+    isDataURI,
+    parseQueryString,
 } from '../global/url'
 import { getPixelRatio } from '../global/dom'
 
-import styles from './avatar.css'
+import styles from './avatar.module.css'
 
 /**
  * @name Avatar

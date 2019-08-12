@@ -1,10 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import moment from 'moment';
 
-import {dateType, weekdays} from './consts';
-import styles from './date-picker.css';
+import {
+    dateType,
+    weekdays,
+} from './consts';
+import styles from './date-picker.module.css';
 
 let hoverTO;
 export default class Day extends Component {

@@ -4,7 +4,7 @@ import classNames from 'classnames'
 
 import dataTests from '../global/data-tests'
 
-import style from './badge.css'
+import style from './badge.module.css'
 
 /**
  * @name Badge

@@ -1,7 +1,7 @@
 import 'dom4';
-import {getPixelRatio} from '../global/dom';
+import { getPixelRatio } from '../global/dom';
 
-import styles from './loader.css';
+import styles from './loader.module.css';
 
 const INITIAL_TICKS = 100;
 

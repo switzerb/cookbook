@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Button from '../button/button';
 
-import styles from './header.css';
+import styles from './header.module.css';
 
 export default class TrayIcon extends Component {
   static propTypes = {

@@ -1,8 +1,8 @@
 import React from 'react';
-import {mount} from 'enzyme';
+import { mount } from 'enzyme';
 
 import Dialog from './dialog';
-import styles from './dialog.css';
+import styles from './dialog.module.css';
 
 describe('Dialog', () => {
   const children = <div/>;

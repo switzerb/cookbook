@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 import Caption from './caption'
-import styles from './button-group.css'
+import styles from './button-group.module.css'
 
 /**
  * @name Button Group

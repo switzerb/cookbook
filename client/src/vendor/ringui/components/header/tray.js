@@ -1,8 +1,11 @@
-import React, {Children, Component} from 'react';
+import React, {
+    Children,
+    Component,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import styles from './header.css';
+import styles from './header.module.css';
 
 const wrapChild = child => child && (
   <div className={styles.trayItem}>{child}</div>

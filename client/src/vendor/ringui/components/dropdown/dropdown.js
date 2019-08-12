@@ -1,11 +1,14 @@
-import React, {cloneElement, Component} from 'react';
+import React, {
+    cloneElement,
+    Component,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import dataTests from '../global/data-tests';
 
 import Anchor from './anchor';
-import styles from './dropdown.css';
+import styles from './dropdown.module.css';
 
 /**
  * @name Dropdown

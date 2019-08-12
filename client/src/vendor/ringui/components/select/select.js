@@ -1,18 +1,21 @@
-import React, {Component, Fragment} from 'react';
+import React, {
+    Component,
+    Fragment,
+} from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import chevronDownIcon from '@jetbrains/icons/chevron-10px.svg';
 import closeIcon from '@jetbrains/icons/close.svg';
 
-import {Anchor} from '../dropdown/dropdown';
-import Avatar, {Size as AvatarSize} from '../avatar/avatar';
+import { Anchor } from '../dropdown/dropdown';
+import Avatar, { Size as AvatarSize } from '../avatar/avatar';
 import Popup from '../popup/popup';
 import List from '../list/list';
-import Input, {Size} from '../input/input';
+import Input, { Size } from '../input/input';
 import Shortcuts from '../shortcuts/shortcuts';
 import Icon from '../icon';
 import Button from '../button/button';
-import buttonStyles from '../button/button.css';
+import buttonStyles from '../button/button.module.css';
 import getUID from '../global/get-uid';
 import rerenderHOC from '../global/rerender-hoc';
 import fuzzyHighlight from '../global/fuzzy-highlight';
@@ -21,7 +24,7 @@ import memoize from '../global/memoize';
 import getEventKey from '../global/get-event-key';
 
 import SelectPopup from './select__popup';
-import styles from './select.css';
+import styles from './select.module.css';
 
 /**
  * @name Select

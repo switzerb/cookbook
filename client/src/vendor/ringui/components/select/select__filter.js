@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Input from '../input/input';
 import sniffr from '../global/sniffer';
 
-import styles from './select-popup.css';
+import styles from './select-popup.module.css';
 
 function noop() {}
 

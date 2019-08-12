@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -8,8 +8,11 @@ import Popup from '../popup/popup';
 import Dropdown from '../dropdown/dropdown';
 
 import DatePopup from './date-popup';
-import {dateType, parseDate} from './consts';
-import styles from './date-picker.css';
+import {
+    dateType,
+    parseDate,
+} from './consts';
+import styles from './date-picker.module.css';
 
 /**
  * @name Date Picker

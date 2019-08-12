@@ -1,10 +1,10 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import Loader from '../loader/loader';
 
-import styles from './loader-screen.css';
+import styles from './loader-screen.module.css';
 
 /**
  * @name Loader Screen

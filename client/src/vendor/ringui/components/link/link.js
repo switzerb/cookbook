@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {pure} from 'recompose';
+import { pure } from 'recompose';
 
 import memoize from '../global/memoize';
 import dataTests from '../global/data-tests';
 
 import ClickableLink from './clickableLink';
-import styles from './link.css';
+import styles from './link.module.css';
 
 /**
  * @name Link

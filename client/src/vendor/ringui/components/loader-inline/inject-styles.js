@@ -1,10 +1,10 @@
-import {conicGradientWithMask} from '../global/conic-gradient';
-import {injectRuleSet} from '../global/inject-styles';
+import { conicGradientWithMask } from '../global/conic-gradient';
+import { injectRuleSet } from '../global/inject-styles';
 import memoize from '../global/memoize';
 import radialGradientMask from '../global/radial-gradient-mask';
 import Theme from '../global/theme';
 
-import styles from './loader-inline.css';
+import styles from './loader-inline.module.css';
 
 const IMAGE_SIZE = 32;
 

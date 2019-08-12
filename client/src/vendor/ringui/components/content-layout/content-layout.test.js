@@ -1,9 +1,12 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {
+    mount,
+    shallow,
+} from 'enzyme';
 
 import ContentLayout from './content-layout';
 import Sidebar from './sidebar';
-import styles from './content-layout.css';
+import styles from './content-layout.module.css';
 
 describe('Content Layout', () => {
   const shallowContentLayout = params => shallow(<ContentLayout {...params}/>);

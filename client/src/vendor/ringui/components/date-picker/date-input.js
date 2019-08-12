@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import Input from '../input/input';
 
-import {dateType} from './consts';
-import styles from './date-picker.css';
+import { dateType } from './consts';
+import styles from './date-picker.module.css';
 
 export default class DateInput extends Component {
   static propTypes = {

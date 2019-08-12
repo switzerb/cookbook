@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import closeIcon from '@jetbrains/icons/close.svg';
@@ -7,7 +7,7 @@ import Theme from '../global/theme';
 import Button from '../button/button';
 
 import ieCompatibleInputHOC from './ie-compatible-hoc';
-import styles from './input.css';
+import styles from './input.module.css';
 
 function noop() {}
 

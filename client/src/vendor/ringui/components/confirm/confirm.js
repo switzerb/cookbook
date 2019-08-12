@@ -1,12 +1,15 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Dialog from '../dialog/dialog';
 import Button from '../button/button';
-import {Content, Header} from '../island/island';
+import {
+    Content,
+    Header,
+} from '../island/island';
 import Panel from '../panel/panel';
 
-import styles from './confirm.css';
+import styles from './confirm.module.css';
 
 /**
  * @name Confirm

@@ -1,9 +1,12 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {
+    mount,
+    shallow,
+} from 'enzyme';
 
-import Link, {linkHOC} from './link';
+import Link, { linkHOC } from './link';
 import ClickableLink from './clickableLink';
-import styles from './link.css';
+import styles from './link.module.css';
 
 function noop() {}
 

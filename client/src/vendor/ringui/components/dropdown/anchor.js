@@ -7,7 +7,7 @@ import Icon from '../icon';
 
 import Button from '../button/button';
 
-import styles from './dropdown.css';
+import styles from './dropdown.module.css';
 
 export default function Anchor({children, className, ...restProps}) {
   return (

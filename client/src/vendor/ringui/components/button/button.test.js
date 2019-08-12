@@ -1,15 +1,15 @@
 import React from 'react'
 import {
-  mount,
-  render,
-  shallow
+    mount,
+    render,
+    shallow,
 } from 'enzyme'
 import caretDownSVG from '@jetbrains/icons/caret-down-10px.svg'
 
 import { CaretDown10pxIcon } from '../icon'
 
 import Button from './button'
-import styles from './button.css'
+import styles from './button.module.css'
 
 describe('Button', () => {
   const shallowButton = props => shallow(<Button {...props}/>);

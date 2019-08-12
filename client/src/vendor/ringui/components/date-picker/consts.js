@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import formats from './formats';
 
-import styles from './date-picker.css';
+import styles from './date-picker.module.css';
 
 const units = ['unit', 'cellSize', 'calHeight', 'yearHeight'].
   reduce((obj, key) => {

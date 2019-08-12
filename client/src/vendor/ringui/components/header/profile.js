@@ -1,13 +1,16 @@
-import React, {Component, PureComponent} from 'react';
+import React, {
+    Component,
+    PureComponent,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import Avatar, {Size} from '../avatar/avatar';
+import Avatar, { Size } from '../avatar/avatar';
 import Button from '../button/button';
 import Dropdown from '../dropdown/dropdown';
 import PopupMenu from '../popup-menu/popup-menu';
 
-import styles from './header.css';
+import styles from './header.module.css';
 
 const rgItemType = PopupMenu.ListProps.Type.LINK;
 

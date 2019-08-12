@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/html'
 import { action } from '@storybook/addon-actions'
 
 import analytics from '../analytics/analytics'
-import linkStyles from '../link/link.css'
+import linkStyles from '../link/link.module.css'
 import AnalyticsCustomPlugin from '../analytics/analytics__custom-plugin'
 
 storiesOf('Components|Analytics', module).

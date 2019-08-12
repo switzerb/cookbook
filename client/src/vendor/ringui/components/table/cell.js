@@ -1,8 +1,8 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import style from './table.css';
+import style from './table.module.css';
 
 export default class Cell extends PureComponent {
   static propTypes = {

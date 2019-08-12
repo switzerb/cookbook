@@ -3,22 +3,28 @@
  */
 
 import 'dom4';
-import React, {Component, cloneElement} from 'react';
+import React, {
+    cloneElement,
+    Component,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import VirtualizedList from 'react-virtualized/dist/es/List';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import WindowScroller from 'react-virtualized/dist/es/WindowScroller';
-import {CellMeasurer, CellMeasurerCache} from 'react-virtualized/dist/es/CellMeasurer';
+import {
+    CellMeasurer,
+    CellMeasurerCache,
+} from 'react-virtualized/dist/es/CellMeasurer';
 
 import dataTests from '../global/data-tests';
 import getUID from '../global/get-uid';
 import scheduleRAF from '../global/schedule-raf';
 import memoize from '../global/memoize';
-import {preventDefault} from '../global/dom';
+import { preventDefault } from '../global/dom';
 import Shortcuts from '../shortcuts/shortcuts';
 
-import styles from './list.css';
+import styles from './list.module.css';
 import ListItem from './list__item';
 import ListCustom from './list__custom';
 import ListLink from './list__link';

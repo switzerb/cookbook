@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import styles from './button-group.css'
+import styles from './button-group.module.css'
 
 export default class Caption extends PureComponent {
   static propTypes = {

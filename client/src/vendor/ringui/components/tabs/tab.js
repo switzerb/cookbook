@@ -1,10 +1,10 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import dataTests from '../global/data-tests';
 
-import styles from './tabs.css';
+import styles from './tabs.module.css';
 
 export default class Tab extends PureComponent {
   static renderTitle(title, isSelected) {

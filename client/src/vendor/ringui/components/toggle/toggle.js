@@ -1,11 +1,11 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Theme from '../global/theme';
 import dataTests from '../global/data-tests';
 
-import styles from './toggle.css';
+import styles from './toggle.module.css';
 
 /**
   * @name Toggle

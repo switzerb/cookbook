@@ -1,10 +1,14 @@
-import React, {Component, createContext, forwardRef} from 'react';
+import React, {
+    Component,
+    createContext,
+    forwardRef,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import getUID from '../global/get-uid';
 
-import styles from './radio.css';
+import styles from './radio.module.css';
 
 export const RadioContext = createContext({});
 
