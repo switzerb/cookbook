@@ -1,5 +1,5 @@
 import React from 'react'
-import QueryAssist from "../vendor/ringui/components/query-assist/query-assist"
+import RingUI from "../util/ring-ui"
 
 // the "database"
 const UNITS = "cup,tsp,Tbsp,teaspoon,Tablespoon,ounce,oz".split(",")
@@ -150,17 +150,17 @@ const dataSource = ({query, caret}) =>
         }))
 
 const ElementBuilder = () => {
-  
-  return (
-    <div>
-      <QueryAssist
-        placeholder="placeholder"
-        onApply={console.log}
-        query="1 cu fl"
-        dataSource={dataSource}
-      />
-    </div>
-  )
+    return (
+        <div>
+            <RingUI.QueryAssist
+                placeholder="placeholder"
+                onApply={console.log}
+                clear={true}
+                query="1 cu fl"
+                dataSource={dataSource}
+            />
+        </div>
+    )
 }
 
 export default ElementBuilder
