@@ -9,7 +9,7 @@ import InlineSVG from 'svg-inline-react';
 import deprecate from 'util-deprecate';
 
 import {Color, Size} from './icon__constants';
-import styles from './icon.css';
+import styles from './icon.module.css';
 
 const warnSize = deprecate(
   () => {},

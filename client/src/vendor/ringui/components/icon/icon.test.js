@@ -4,7 +4,7 @@ import defaultIcon from '@jetbrains/icons/umbrella.svg';
 import expandIcon from '@jetbrains/icons/expand.svg';
 
 import Icon from './icon';
-import styles from './icon.css';
+import styles from './icon.module.css';
 
 describe('Icon', () => {
   const mountIcon = props => mount(<Icon glyph={defaultIcon} {...props}/>);

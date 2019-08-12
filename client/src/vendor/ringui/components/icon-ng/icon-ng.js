@@ -3,7 +3,7 @@ import 'dom4';
 
 import {Color} from '../icon/icon__constants';
 import TemplateNg from '../template-ng/template-ng';
-import styles from '../icon/icon.css';
+import styles from '../icon/icon.module.css';
 
 /**
  * @name Icon Ng

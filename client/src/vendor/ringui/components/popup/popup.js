@@ -23,7 +23,7 @@ import position, {
   MinWidth,
   positionPropKeys
 } from './position';
-import styles from './popup.css';
+import styles from './popup.module.css';
 
 const stop = e => e.stopPropagation();
 

@@ -10,7 +10,7 @@ import {mount} from 'enzyme';
 import simulateCombo from '../../test-helpers/simulate-combo';
 
 import QueryAssist from './query-assist';
-import styles from './query-assist.css';
+import styles from './query-assist.module.scss';
 
 describe('Query Assist', () => {
   const testQuery = 'oooooooooooo';

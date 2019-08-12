@@ -4,8 +4,8 @@ import {findDOMNode} from 'react-dom';
 import debounce from 'just-debounce-it';
 import classNames from 'classnames';
 import deepEqual from 'deep-equal';
-import searchIcon from '@jetbrains/icons/search.svg';
-import closeIcon from '@jetbrains/icons/close.svg';
+import searchIcon from '../../icons/search.svg';
+import closeIcon from '../../icons/close.svg';
 
 import Icon from '../icon';
 
@@ -22,7 +22,7 @@ import Theme from '../global/theme';
 
 import QueryAssistSuggestions from './query-assist__suggestions';
 
-import styles from './query-assist.css';
+import styles from './query-assist.module.scss';
 
 const POPUP_COMPENSATION = PopupMenu.ListProps.Dimension.ITEM_PADDING +
   PopupMenu.PopupProps.Dimension.BORDER_WIDTH;
@@ -727,6 +727,8 @@ export default class QueryAssist extends Component {
     const renderGlass = glass && !renderLoader;
     const renderUnderline = theme === Theme.DARK;
     const actions = this.renderActions();
+  
+    console.log(styles);
 
     const inputClasses = classNames({
       [`${styles.input} ring-js-shortcuts`]: true,

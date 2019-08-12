@@ -3,7 +3,7 @@ import 'dom4';
 import 'angular';
 import 'angular-mocks';
 import {CheckmarkIcon, WarningIcon} from '../icon';
-import styles from '../icon/icon.css';
+import styles from '../icon/icon.module.css';
 
 import Icon from './icon-ng';
 
@@ -24,10 +24,10 @@ describe.skip('Icon Ng', () => {
     $compile = _$compile_;
 
     element = $compile(`
-      <rg-icon 
-      color="{{color}}" 
-      glyph="{{icon}}" 
-      loading="loading" 
+      <rg-icon
+      color="{{color}}"
+      glyph="{{icon}}"
+      loading="loading"
       ></rg-icon>
     `)(scope)[0];
     scope.$digest();
