@@ -1,0 +1,14 @@
+.root > div > div > span {
+
+    & > span[class*="letter-field-name"] {
+        background: rgb(255, 221, 238) !important;
+    }
+
+    & > span[class*="letter-field-value"] {
+        background: rgb(221, 238, 255) !important;
+    }
+
+    & > span[class*="letter-operator"] {
+        background: rgb(238, 255, 221) !important;
+    }
+}

@@ -59,6 +59,10 @@ class DraftRecipeStore extends ReduceStore {
 
                     case "/add": {
                         return this.getInitialState()
+                            .map(s => ({
+                                ...s,
+                                ingredients: [{raw: "1 cup sifted flour"}]
+                            }))
                     }
 
                     default:

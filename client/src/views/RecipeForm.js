@@ -56,6 +56,7 @@ const RecipeForm = ({draft: lo, onSave, onCancel}) => {
                 <List
                     dataSource={draft.ingredients}
                     renderItem={(it, i) => <List.Item>
+                        <div style={{width: "40%"}}>
                         <ElEdit
                             name={`ingredients.${i}`}
                             value={it}
@@ -66,6 +67,7 @@ const RecipeForm = ({draft: lo, onSave, onCancel}) => {
                                 text,
                             })}
                         />
+                        </div>
                         <div style={{marginLeft: "auto"}}>
                             <Button
                                 key="add"

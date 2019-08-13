@@ -7,6 +7,22 @@ import {
 } from "antd"
 import RecipeApi from "../data/RecipeApi"
 import debounce from "../util/debounce"
+import RingUI from "../util/ring-ui"
+
+import styles from "./ElementBuilder.module.scss"
+
+const UNITS = "cup,tsp,Tbsp,teaspoon,Tablespoon,ounce,oz".split(",")
+const ITEMS = "bouillon cube,flour,eggs,flip-flops,flippers,salt,sugar,water,milk,cucumber".split(",")
+const NUM_RE = /^[0-9]+(\.[0-9]*)?$/
+
+const styleFromType = type => {
+    switch (type) {
+        case "AMOUNT": return "field_name"
+        case "UNIT": return "operator"
+        case "ITEM": return "field_value"
+        default: return "text"
+    }
+}
 
 class ElEdit extends React.PureComponent {
 
@@ -102,36 +118,83 @@ class ElEdit extends React.PureComponent {
         e.preventDefault() // no default
         onMultilinePaste(text)
     }
-
+    
+    shitParser = (query, caret) => {
+        if (query == null || query.trim().length === 0) return Promise.reject()
+        if (query.trim() !== query) return Promise.reject()
+        
+        // incremental things here
+        return RecipeApi.recognizeElement(query).then( response => {
+            return Promise.resolve({
+                    query,
+                    caret,
+                    ranges: response.ranges,
+                    suggestions: response.suggestions
+            })
+    
+        })
+        
+    }
+    
+    dataSource = ({query, caret}) => {
+        const { name } = this.props
+        if (this.props.value.raw !== query) {
+            this.props.onChange({
+                target: {
+                    name: `${name}.raw`,
+                    value: query,
+                }
+            })
+        }
+        
+        return this.shitParser(query, caret).then( recog => {
+            console.log("shitParser: ", recog)
+            return {
+                query: recog.query,
+                caret: recog.caret,
+                styleRanges: recog.ranges.map(it => ({
+                    start: it.start,
+                    length: it.end - it.start,
+                    style: styleFromType(it.type),
+                })),
+                suggestions: recog.suggestions.map(it => {
+                    const sug = {
+                        group: it.type,
+                        completionStart: it.target.start,
+                        completionEnd: it.target.end,
+                        caret: caret,
+                        description: `from ${it.target.start}-${it.target.end} (caret: ${caret})`
+                    }
+                    if (typeof it.name === "string") {
+                        sug.option = it.name
+                    } else {
+                        sug.option = it.name
+                        sug.matchingStart = it.target.start
+                        sug.matchingEnd = it.target.end
+                    }
+                    return sug
+                }),
+            }
+        })
+    }
+    
     render() {
-        const {
-            name,
-            value,
-            onChange,
-        } = this.props
-        const {
-            raw,
-        } = value
+        const { value } = this.props
+        const { raw } = value
         const {
             recog,
             q, u, uv, n, nv, p,
         } = this.state
+        
         return <React.Fragment>
-            <Input name={`${name}.raw`}
-                   value={raw}
-                   onChange={onChange}
-                   onPaste={this.onPaste}
-                   style={{
-                       width: "50%",
-                   }}
-                   suffix={n == null
-                       ? <Icon type="warning"
-                               title="No Ingredient Found!"
-                               style={{
-                                   color: "red",
-                               }}
-                       />
-                       : <span />}
+            <div className={styles.root}>
+            <RingUI.QueryAssist
+                placeholder="placeholder"
+                onApply={console.log}
+                clear
+                glass
+                query={raw}
+                dataSource={this.dataSource}
             />
             {recog == null
                 ? <Hunk><Spin /></Hunk>
@@ -142,6 +205,7 @@ class ElEdit extends React.PureComponent {
                     {p && <span>{n ? ", " : null}{p}</span>}
                 </Hunk>
             }
+            </div>
         </React.Fragment>
     }
 }
