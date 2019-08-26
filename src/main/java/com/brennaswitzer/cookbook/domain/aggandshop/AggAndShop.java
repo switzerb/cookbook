@@ -1,4 +1,4 @@
-package com.brennaswitzer.cookbook.domain.redux;
+package com.brennaswitzer.cookbook.domain.aggandshop;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class Demo {
+public class AggAndShop {
 
     public static void main(String[] args) {
         UnitOfMeasure cup = new UnitOfMeasure("cup");
