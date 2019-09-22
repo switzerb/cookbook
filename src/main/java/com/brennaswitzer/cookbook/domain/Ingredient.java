@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import javax.persistence.*;
-import java.util.Comparator;
+import java.util.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -29,6 +29,9 @@ public abstract class Ingredient implements Identified {
 
     private String name;
 
+    @ElementCollection
+    private Set<LabelRef> labels = new HashSet<>();
+
     Ingredient() {
     }
 
@@ -51,6 +54,32 @@ public abstract class Ingredient implements Identified {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<LabelRef> getLabels() {
+        return labels;
+    }
+
+    public void addAllLabels(Collection<Label> labels) {
+        for (Label l : labels) {
+            addLabel(l);
+        }
+    }
+
+    public void removeAllLabels() {
+        this.labels.clear();
+    }
+
+    public void setLabels(Set<LabelRef> labels) {
+        this.labels = labels;
+    }
+
+    public void addLabel(Label label) {
+        labels.add(new LabelRef(label));
+    }
+
+    public void removeLabel(Label label) {
+        labels.remove(new LabelRef(label));
     }
 
 }
