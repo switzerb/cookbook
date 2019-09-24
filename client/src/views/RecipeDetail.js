@@ -89,6 +89,8 @@ const RecipeDetail = ({recipeLO, staged}) => {
                 <h3>Preparation</h3>
                 <Directions text={recipe.directions} />
             </React.Fragment>}
+            
+            {recipe.labels}
 
         </div>
     )

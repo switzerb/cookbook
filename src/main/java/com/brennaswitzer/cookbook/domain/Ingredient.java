@@ -18,7 +18,7 @@ import java.util.*;
         @JsonSubTypes.Type(value = PantryItem.class, name = "PantryItem"),
         @JsonSubTypes.Type(value = Recipe.class, name = "Recipe")
 })
-public abstract class Ingredient implements Identified {
+public abstract class Ingredient implements Identified, Labeled {
 
     public static Comparator<Ingredient> BY_NAME = (a, b) ->
             a.getName().compareToIgnoreCase(b.getName());
@@ -56,22 +56,12 @@ public abstract class Ingredient implements Identified {
         this.name = name;
     }
 
-    public Set<LabelRef> getLabels() {
-        return labels;
-    }
-
-    public void addAllLabels(Collection<Label> labels) {
-        for (Label l : labels) {
-            addLabel(l);
+    public Set<Label> getLabels() {
+        Set<Label> s = new HashSet<>();
+        for (LabelRef ref : labels) {
+            s.add(ref.getLabel());
         }
-    }
-
-    public void removeAllLabels() {
-        this.labels.clear();
-    }
-
-    public void setLabels(Set<LabelRef> labels) {
-        this.labels = labels;
+        return s;
     }
 
     public void addLabel(Label label) {
@@ -81,6 +71,11 @@ public abstract class Ingredient implements Identified {
     public void removeLabel(Label label) {
         labels.remove(new LabelRef(label));
     }
+
+    public void clearLabels() {
+        this.labels.clear();
+    }
+
 
 }
 
