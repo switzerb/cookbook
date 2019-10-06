@@ -22,6 +22,7 @@ import {
     SCOPE_EVERYONE,
     SCOPE_MINE,
 } from "../data/LibraryStore"
+import TreeDemo from "../TreeDemo"
 
 const updateFilter = (e) => {
     const {value: filter} = e.target
@@ -138,4 +139,5 @@ RecipesList.propTypes = {
     shoppingList: loadObjectOf(PropTypes.array),
 }
 
-export default RecipesList
+// export default RecipesList
+export default TreeDemo;
