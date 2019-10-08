@@ -39,7 +39,8 @@ public class RecipeController {
 
     @GetMapping("/")
     public Iterable<IngredientInfo> getRecipes(
-            @RequestParam(name = "scope", defaultValue = "mine") String scope
+            @RequestParam(name = "scope", defaultValue = "mine") String scope,
+            @RequestParam(name= "filter", defaultValue = "") String filter
     ) {
         boolean hasFilter = filter.length() > 0;
         List<Recipe> recipes;

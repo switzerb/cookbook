@@ -13,7 +13,6 @@ const RecipeApi = {
         // save this for later
         const id = recipe.id
         recipe = {...recipe}
-        recipe.labels = ["dinner", "make-ahead"]
         // the clientId gives the server grief
         delete recipe.id
         promiseFlux(
