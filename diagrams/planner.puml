@@ -1,68 +1,81 @@
 @startuml
 hide empty members
+note as N1
+    Meta properties are omitted.
 
-enum PlanState {
-    PENDING
-    ACQUIRED
-    COMPLETE
-}
-enum PlanItemType {
-    SECTION
-    RECIPE
-    GROCERY_ITEM
-}
+    Properties are assumed
+    where fields are declared.
+end note
+
 class Planner {
-    String name
-    User owner
-    Acl acl
-    List<PlanItem> children
+    name : String
+    owner : User
+    acl : Acl
+    children : List<PlanItem>
 }
-Planner *-- "*" PlanItem : children
-class PlanItem implements Element {
-    PlanItemType type
-    PlanState state
-    DateTime dueDate
-    String notes
-    List<PlanItem> children
-    Recipe sourceRecipe
-    Long recipeAddId
-    __ from Element __
-    String raw
-    Quantity quantity
-    Ingredient ingredient
-    String prep
+Planner *-- PlanItem : children
+together {
+    enum PlanState {
+        PENDING
+        ACQUIRED
+        COMPLETE
+    }
+    enum PlanItemType {
+        ' Presence of sourceRecipe indicates whether a GROUP item
+        ' represents a recipe or a "simple" section.
+        GROUP
+        GROCERY_ITEM
+    }
 }
-PlanItem o-- "1" PlanItemType : type
-PlanItem o-- "1" PlanState : state
-PlanItem *-- "*" PlanItem : children
-PlanItem o-- "?" Recipe : sourceRecipe
+class PlanItem {
+    type : PlanItemType
+    state : PlanState
+    dueDate : DateTime
+    children : List<PlanItem>
+    ' Locked at create time, supersedes ingredient.
+    sourceRecipe : Recipe
+    ' Per recipe-add event. If a recipe includes another recipe
+    ' ingredients of the nested recipe will have to ids, one for
+    ' the added recipe and one for the nested recipe. The IDs
+    ' are opaque values used only for equality checks.
+    recipeAddIds : List<Long>
+    __ «Element» __
+    name : String
+    quantity : Quantity
+    ' based on parsing name
+    ingredient : Ingredient
+    notes : String
+}
+'can't control direction of the arrow w/ class syntax
+PlanItem .l.|> Element
+PlanItem o-- Recipe : sourceRecipe
+PlanItem *- PlanItem : children
+PlanItem o-l- Ingredient : ingredient
+PlanItem o-- PlanItemType : type
+PlanItem o-- PlanState : state
 interface Element {
-    {abstract} String raw
-    {abstract} Quantity quantity
-    {abstract} Ingredient ingredient
-    {abstract} String prep
+    {abstract} raw : String
+    {abstract} quantity : Quantity
+    {abstract} ingredient : Ingredient
+    {abstract} prep : String
 }
-Element o-  "?" Ingredient : ingredient
 interface Ingredient {
-    {abstract} String name
+    {abstract} name : String
+}
+class GroceryItem implements Ingredient {
+    name : String
 }
 class Recipe implements Ingredient {
-    String instructions
-    List<Element> ingredients
+    name : String
+    instructions : String
+    ingredients : List<Element>
 }
-Recipe *-u- "+" Element : ingredients
-class GroceryItem implements Ingredient {
+Recipe *-u- IngredientRef : ingredients
+class IngredientRef implements Element {
+    raw : String
+    quantity : Quantity
+    ingredient : Ingredient
+    prep : String
 }
-'package uom {
-'    Element *-- "?" Quantity : quantity
-'    class Quantity {
-'        double amount
-'        Unit unit
-'    }
-'    Quantity *-- Unit : unit
-'    class Unit {
-'        String name
-'        Map<Unit, Double> conversions
-'    }
-'}
+IngredientRef o-  Ingredient : ingredient
 @enduml
