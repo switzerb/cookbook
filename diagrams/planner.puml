@@ -1,0 +1,68 @@
+@startuml
+hide empty members
+
+enum PlanState {
+    PENDING
+    ACQUIRED
+    COMPLETE
+}
+enum PlanItemType {
+    SECTION
+    RECIPE
+    GROCERY_ITEM
+}
+class Planner {
+    String name
+    User owner
+    Acl acl
+    List<PlanItem> children
+}
+Planner *-- "*" PlanItem : children
+class PlanItem implements Element {
+    PlanItemType type
+    PlanState state
+    DateTime dueDate
+    String notes
+    List<PlanItem> children
+    Recipe sourceRecipe
+    Long recipeAddId
+    __ from Element __
+    String raw
+    Quantity quantity
+    Ingredient ingredient
+    String prep
+}
+PlanItem o-- "1" PlanItemType : type
+PlanItem o-- "1" PlanState : state
+PlanItem *-- "*" PlanItem : children
+PlanItem o-- "?" Recipe : sourceRecipe
+interface Element {
+    {abstract} String raw
+    {abstract} Quantity quantity
+    {abstract} Ingredient ingredient
+    {abstract} String prep
+}
+Element o-  "?" Ingredient : ingredient
+interface Ingredient {
+    {abstract} String name
+}
+class Recipe implements Ingredient {
+    String instructions
+    List<Element> ingredients
+}
+Recipe *-u- "+" Element : ingredients
+class GroceryItem implements Ingredient {
+}
+'package uom {
+'    Element *-- "?" Quantity : quantity
+'    class Quantity {
+'        double amount
+'        Unit unit
+'    }
+'    Quantity *-- Unit : unit
+'    class Unit {
+'        String name
+'        Map<Unit, Double> conversions
+'    }
+'}
+@enduml
