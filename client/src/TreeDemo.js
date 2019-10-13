@@ -13,6 +13,7 @@ class TreeDemo extends React.Component {
                 children: [{
                     title: '3 Eggs',
                 }],
+                expanded: true,
             }],
         }
     }
@@ -22,8 +23,11 @@ class TreeDemo extends React.Component {
             <SortableTree
                 theme={TreeTheme}
                 treeData={this.state.treeData}
-                onChange={treeData => {
-                    this.setState({treeData})
+                onChange={(data, ...rest) => {
+                    console.log("TREE CHANGE", data, ...rest)
+                }}
+                onMoveNode={(...args) => {
+                    console.log("TREE MOVE", ...args)
                 }}
             />
         </div>

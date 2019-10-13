@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './TreeTheme.css'
 import { isDescendant } from "react-sortable-tree"
+import ElEdit from "./views/ElEdit"
 
 // very simple className utility for creating a classname string...
 // Falsy arguments are ignored:
@@ -30,7 +31,24 @@ function classnames() {
 }
 
 class MyNodeContentRenderer extends Component {
+    constructor(...args) {
+        super(...args)
+        this.state = {
+            editMode: false,
+        }
+        this.toggleEditMode = this.toggleEditMode.bind(this);
+    }
+
+    toggleEditMode() {
+        this.setState(s => ({
+            editMode: !s.editMode,
+        }))
+    }
+
     render() {
+        const {
+            editMode,
+        } = this.state
         const {
             scaffoldBlockPxWidth,
             toggleChildrenVisibility,
@@ -40,7 +58,6 @@ class MyNodeContentRenderer extends Component {
             canDrop,
             canDrag,
             node,
-            title,
             subtitle,
             draggedNode,
             path,
@@ -60,7 +77,6 @@ class MyNodeContentRenderer extends Component {
             rowDirection,
             ...otherProps
         } = this.props
-        const nodeTitle = title || node.title
         const nodeSubtitle = subtitle || node.subtitle
         const rowDirectionClass = rowDirection === 'rtl' ? 'rst__rtl' : null
 
@@ -159,22 +175,28 @@ class MyNodeContentRenderer extends Component {
                                     !canDrag && 'rst__rowContentsDragDisabled',
                                     rowDirectionClass
                                 )}
+                                onClick={this.toggleEditMode}
                             >
                                 <div className={classnames('rst__rowLabel', rowDirectionClass)}>
-                  <span
-                      className={classnames(
-                          'rst__rowTitle',
-                          node.subtitle && 'rst__rowTitleWithSubtitle'
-                      )}
-                  >
-                    {typeof nodeTitle === 'function'
-                        ? nodeTitle({
-                            node,
-                            path,
-                            treeIndex,
-                        })
-                        : nodeTitle}
-                  </span>
+                        <span
+                            className={classnames(
+                                'rst__rowTitle',
+                                node.subtitle && 'rst__rowTitleWithSubtitle',
+                            )}
+                        >
+                          {editMode
+                              ? <ElEdit
+                                  name={node.title}
+                                  value={{
+                                      raw: node.title,
+                                  }}
+                                  onChange={(...args) =>
+                                      console.log("EL CHANGE", ...args)}
+                                  onBlur={this.toggleEditMode}
+                                  focused
+                              />
+                              : node.title}
+                        </span>
 
                                     {nodeSubtitle && (
                                         <span className="rst__rowSubtitle">
