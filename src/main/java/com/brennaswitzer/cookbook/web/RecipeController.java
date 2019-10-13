@@ -19,6 +19,7 @@ import javax.persistence.NoResultException;
 import javax.validation.Valid;
 import javax.xml.ws.Response;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,9 +41,18 @@ public class RecipeController {
     public Iterable<IngredientInfo> getRecipes(
             @RequestParam(name = "scope", defaultValue = "mine") String scope
     ) {
-        List<Recipe> recipes = "everyone".equals(scope)
-                ? recipeService.findEveryonesRecipes()
-                : recipeService.findMyRecipes();
+        boolean hasFilter = filter.length() > 0;
+        List<Recipe> recipes;
+        if ("everyone".equals(scope)) {
+             recipes = hasFilter
+                ? IngredientInfo.fromRecipes(recipeService.findRecipeByName(filter.toLowerCase()))
+                : recipeService.findEveryonesRecipes();
+        } else {
+             recipes =  hasFilter
+                ? IngredientInfo.fromRecipes(recipeService.findRecipeByNameAndOwner(filter.toLowerCase()))
+                : IngredientInfo.fromRecipes(recipeService.findMyRecipes());
+        }
+
         return recipes
                 .stream()
                 .map(IngredientInfo::from)
