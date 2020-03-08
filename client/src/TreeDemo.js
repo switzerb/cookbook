@@ -9,17 +9,33 @@ class TreeDemo extends React.Component {
 
         this.state = {
             treeData: [{
-                title: '1 lbs Chicken',
+                title: "Sunday 4/4",
                 children: [{
-                    title: '3 Eggs',
+                    title: 'Enchiladas',
+                    expanded: true,
+                    children: [{
+                        title: 'Chicken',
+                    }],
                 }],
                 expanded: true,
+            }, {
+                title: "Monday 4/5",
+                children: [{
+                    title: 'Enchiladas',
+                    children: [{
+                        title: 'Scallions',
+                    }, {
+                        title: 'Tortillas',
+                    }],
+                    expanded: true,
+                }],
+                expanded: true
             }],
         }
     }
 
     render() {
-        return <div style={{height: 400}}>
+        return <div style={{height: 800}}>
             <SortableTree
                 theme={TreeTheme}
                 treeData={this.state.treeData}
