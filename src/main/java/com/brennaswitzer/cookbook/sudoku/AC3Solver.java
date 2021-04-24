@@ -1,6 +1,8 @@
 package com.brennaswitzer.cookbook.sudoku;
 
-import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
 
 import java.util.BitSet;
 import java.util.function.BiPredicate;
@@ -12,10 +14,15 @@ public class AC3Solver extends Sudoku {
         super(board);
     }
 
-    @AllArgsConstructor
+    @Value
     private static class Arc {
-        final int x, y;
-        final BiPredicate<Integer, Integer> constraint;
+
+        int x, y;
+
+        @EqualsAndHashCode.Exclude
+        @ToString.Exclude
+        BiPredicate<Integer, Integer> constraint;
+
     }
 
     private BitSet[] domains;
@@ -26,7 +33,7 @@ public class AC3Solver extends Sudoku {
         buildDomains();
         applyGivens();
         buildArcs();
-        Bag<Arc> queue = new Bag<>();
+        BagSet<Arc> queue = new BagSet<>();
         for (Bag<Arc> arcs : inboundArcs) {
             for (Arc a : arcs) {
                 queue.push(a);

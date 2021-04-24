@@ -19,8 +19,8 @@ public class Bag <E> implements Iterable<E> {
         return head == null;
     }
 
-    public void push(E value) {
-        head = new Node<>(value, head);
+    public void push(E e) {
+        head = new Node<>(e, head);
     }
 
     public E pop() {
