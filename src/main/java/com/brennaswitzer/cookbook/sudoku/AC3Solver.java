@@ -23,7 +23,8 @@ public class AC3Solver extends Sudoku {
     protected boolean solve() {
         // variables are implicit: [0-len)
         buildDomains();
-        buildArcs(); // constraints are all "binary !="
+        buildGivens();
+        buildArcs();
         Bag<Arc> queue = new Bag<>();
         for (Bag<Arc> arcs : inboundArcs) {
             for (Arc a : arcs) {
@@ -84,6 +85,15 @@ public class AC3Solver extends Sudoku {
         }
     }
 
+    private void buildGivens() {
+        for (int i = 0; i < len; i++) {
+            if (board[i] != EMPTY_CELL) {
+                domains[i].clear();
+                domains[i].set(board[i]);
+            }
+        }
+    }
+
     private void buildDomains() {
         BitSet seed = new BitSet(dim);
         for (int i = 1; i <= dim; i++) {
@@ -91,12 +101,7 @@ public class AC3Solver extends Sudoku {
         }
         domains = new BitSet[len];
         for (int i = 0; i < len; i++) {
-            if (board[i] == EMPTY_CELL) {
-                domains[i] = (BitSet) seed.clone();
-            } else {
-                domains[i] = new BitSet();
-                domains[i].set(board[i]);
-            }
+            domains[i] = (BitSet) seed.clone();
         }
     }
 
