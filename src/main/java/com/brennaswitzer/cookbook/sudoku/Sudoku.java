@@ -8,6 +8,7 @@ public abstract class Sudoku implements Solver {
     public static final int EMPTY_CELL = 0;
 
     protected final int[] board;
+    protected final int len;
     protected final int dim;
     protected final int boxDim;
 
@@ -21,7 +22,7 @@ public abstract class Sudoku implements Solver {
     private int frameCount = 0;
 
     public Sudoku(String board) {
-        int len = board.length();
+        len = board.length();
         dim = (int) Math.sqrt(len);
         assert dim * dim == len;
         boxDim = (int) Math.sqrt(dim);
@@ -39,6 +40,17 @@ public abstract class Sudoku implements Solver {
         if (!solved) {
             System.out.println("Unsolvable puzzle?!");
         }
+    }
+
+    protected int findEmptyCell() {
+        for (int i = 0; i < len; i++) {
+            if (board[i] == EMPTY_CELL) return i;
+        }
+        return -1;
+    }
+
+    protected int idx(int r, int c) {
+        return r * dim + c;
     }
 
     protected abstract boolean solve();
