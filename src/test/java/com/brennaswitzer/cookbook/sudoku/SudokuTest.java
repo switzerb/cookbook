@@ -2,10 +2,16 @@ package com.brennaswitzer.cookbook.sudoku;
 
 import org.junit.Test;
 
+import java.util.function.BooleanSupplier;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public abstract class SudokuTest {
+
+    public static final String ONE_STAR = ".549..67.8..5...4...68243...4...5..2.32...19.7..3...8...54139...2...9..3.19..786.";
+    public static final String FIVE_STAR = "6..1...53..8...71..2..5....974..5......9.1......2..964....3..4..62...5..14...9..8";
+    public static final String TABLE_FIVE = ".61..7..3.92..3..............853..........5.45....8....4......1...16.8..6........";
 
     protected abstract Solver getSolver(String puzzle);
 
@@ -32,6 +38,15 @@ public abstract class SudokuTest {
         }
     }
 
+    protected void benchmark(String label, int iterations, BooleanSupplier work) {
+        assert work.getAsBoolean();
+        long start = System.nanoTime();
+        for (int i = 0; i < iterations; i++)
+            assert work.getAsBoolean();
+        long elapsed = System.nanoTime() - start;
+        System.out.printf("BENCHMARK[%s]: %,d μs, for %d iterations%n", label, elapsed / 1000 / iterations, iterations);
+    }
+
     @Test
     public void _4x4() {
         solve("4213132.24313142",
@@ -47,7 +62,7 @@ public abstract class SudokuTest {
 
     @Test
     public void oneStar() {
-        solve(".549..67.8..5...4...68243...4...5..2.32...19.7..3...8...54139...2...9..3.19..786.",
+        solve(ONE_STAR,
                 "254931678893576241176824359948165732532748196761392485685413927427689513319257864");
     }
 
@@ -65,7 +80,7 @@ public abstract class SudokuTest {
 
     @Test
     public void fiveStar() {
-        solve("6..1...53..8...71..2..5....974..5......9.1......2..964....3..4..62...5..14...9..8",
+        solve(FIVE_STAR,
                 "697128453538496712421753896974365281286941375315287964859632147762814539143579628");
     }
 
@@ -77,7 +92,7 @@ public abstract class SudokuTest {
 
     @Test
     public void tableFive() {
-        solve(".61..7..3.92..3..............853..........5.45....8....4......1...16.8..6........",
+        solve(TABLE_FIVE,
                 "461987253792453168385216479128534796936721584574698312849375621253169847617842935");
     }
 

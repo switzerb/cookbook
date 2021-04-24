@@ -15,7 +15,7 @@ public class AC3Solver extends Sudoku {
         int x, y;
     }
 
-    private List<Set<Integer>> domains;
+    private BitSet[] domains;
     private Set<Arc> arcs;
 
     protected boolean solve() {
@@ -39,10 +39,10 @@ public class AC3Solver extends Sudoku {
 
     private boolean rebuildBoard() {
         boolean solved = true;
-        for (int i = 0; i < domains.size(); i++) {
-            Set<Integer> d = domains.get(i);
-            if (d.size() == 1) {
-                board[i] = d.iterator().next();
+        for (int i = 0; i < len; i++) {
+            BitSet d = domains[i];
+            if (d.cardinality() == 1) {
+                board[i] = d.nextSetBit(0);
             } else {
                 solved = false;
             }
@@ -51,15 +51,14 @@ public class AC3Solver extends Sudoku {
     }
 
     private boolean arcReduce(Arc arc) {
-        Set<Integer> Dx = domains.get(arc.x);
-        if (Dx.size() == 1) return false;
+        BitSet Dx = domains[arc.x];
+        if (Dx.cardinality() == 1) return false;
         boolean change = false;
-        Set<Integer> Dy = domains.get(arc.y);
-        Iterator<Integer> vxItr = Dx.iterator();
-        while (vxItr.hasNext()) {
-            int vx = vxItr.next();
+        BitSet Dy = domains[arc.y];
+        for (int i = Dx.nextSetBit(0); i >= 0; i = Dx.nextSetBit(i + 1)) {
+            int vx = i;
             if (Dy.stream().noneMatch(vy -> vx != vy)) {
-                vxItr.remove();
+                Dx.clear(i);
                 change = true;
             }
         }
@@ -76,16 +75,17 @@ public class AC3Solver extends Sudoku {
     }
 
     private void buildDomains() {
-        Collection<Integer> seed = new ArrayList<>(dim);
+        BitSet seed = new BitSet(dim);
         for (int i = 1; i <= dim; i++) {
-            seed.add(i);
+            seed.set(i);
         }
-        domains = new ArrayList<>(len);
+        domains = new BitSet[len];
         for (int i = 0; i < len; i++) {
             if (board[i] == EMPTY_CELL) {
-                domains.add(new HashSet<>(seed));
+                domains[i] = (BitSet) seed.clone();
             } else {
-                domains.add(Collections.singleton(board[i]));
+                domains[i] = new BitSet();
+                domains[i].set(board[i]);
             }
         }
     }
