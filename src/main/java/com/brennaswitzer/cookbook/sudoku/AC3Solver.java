@@ -1,8 +1,9 @@
 package com.brennaswitzer.cookbook.sudoku;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
 
 import java.util.BitSet;
+import java.util.function.BiPredicate;
 
 public class AC3Solver extends Sudoku {
 
@@ -10,9 +11,10 @@ public class AC3Solver extends Sudoku {
         super(board);
     }
 
-    @Value
+    @AllArgsConstructor
     private static class Arc {
-        int x, y;
+        final int x, y;
+        final BiPredicate<Integer, Integer> constraint;
     }
 
     private BitSet[] domains;
@@ -62,7 +64,7 @@ public class AC3Solver extends Sudoku {
         BitSet Dy = domains[arc.y];
         for (int i = Dx.nextSetBit(0); i >= 0; i = Dx.nextSetBit(i + 1)) {
             int vx = i;
-            if (Dy.stream().noneMatch(vy -> vx != vy)) {
+            if (Dy.stream().noneMatch(vy -> arc.constraint.test(vx, vy))) {
                 Dx.clear(i);
                 change = true;
             }
@@ -73,12 +75,11 @@ public class AC3Solver extends Sudoku {
     private void buildArcs() {
         //noinspection unchecked
         inboundArcs = (Bag<Arc>[]) new Bag[len];
-        int idx = 0;
         for (int c = 0; c < len; c++) {
-            Bag<Arc> b = new Bag<>();
-            inboundArcs[c] = b;
+            Bag<Arc> arcs = new Bag<>();
+            inboundArcs[c] = arcs;
             for (int n : getNeighbors(c)) {
-                b.push(new Arc(n, c));
+                arcs.push(new Arc(n, c, (a, b) -> !a.equals(b)));
             }
         }
     }
