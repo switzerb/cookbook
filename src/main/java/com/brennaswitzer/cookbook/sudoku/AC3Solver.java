@@ -33,7 +33,7 @@ public class AC3Solver extends Sudoku {
         buildDomains();
         applyGivens();
         buildArcs();
-        BagSet<Arc> queue = new BagSet<>();
+        UniqueBag<Arc> queue = new UniqueBag<>();
         for (Bag<Arc> arcs : inboundArcs) {
             for (Arc a : arcs) {
                 queue.push(a);
