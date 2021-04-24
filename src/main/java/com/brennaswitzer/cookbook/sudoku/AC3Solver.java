@@ -15,31 +15,26 @@ public class AC3Solver extends Sudoku {
         int x, y;
     }
 
-    @Value
-    private static class Node {
-        Arc arc;
-        Node next;
-    }
-
     private BitSet[] domains;
-    private Arc[] arcs;
+    private Bag<Arc>[] inboundArcs;
 
     protected boolean solve() {
         // variables are implicit: [0-len)
         buildDomains();
         buildArcs(); // constraints are all "binary !="
-        Node queue = null;
-        for (Arc a : arcs) {
-            queue = new Node(a, queue);
+        Bag<Arc> queue = new Bag<>();
+        for (Bag<Arc> arcs : inboundArcs) {
+            for (Arc a : arcs) {
+                queue.push(a);
+            }
         }
-        while (queue != null) {
+        while (!queue.isEmpty()) {
             enterFrame();
-            Arc arc = queue.arc;
-            queue = queue.next;
+            Arc arc = queue.pop();
             if (arcReduce(arc)) {
-                for (Arc a : arcs) {
-                    if (a.x != arc.y && a.y == arc.x) {
-                        queue = new Node(a, queue);
+                for (Arc a : inboundArcs[arc.x]) {
+                    if (a.x != arc.y) {
+                        queue.push(a);
                     }
                 }
             }
@@ -76,14 +71,16 @@ public class AC3Solver extends Sudoku {
     }
 
     private void buildArcs() {
-        arcs = new Arc[len * getNeighbors(0).length];
+        //noinspection unchecked
+        inboundArcs = (Bag<Arc>[]) new Bag[len];
         int idx = 0;
         for (int c = 0; c < len; c++) {
+            Bag<Arc> b = new Bag<>();
+            inboundArcs[c] = b;
             for (int n : getNeighbors(c)) {
-                arcs[idx++] = new Arc(c, n);
+                b.push(new Arc(n, c));
             }
         }
-        assert arcs.length == idx;
     }
 
     private void buildDomains() {
