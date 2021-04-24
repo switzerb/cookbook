@@ -23,8 +23,8 @@ public abstract class SudokuTest {
     private void solve(String puzzle, String solution) {
         if (solution != null) check(puzzle, solution);
         Solver solver = getSolver(puzzle);
-        String solved = solver.getSolution();
-        System.out.printf("puzzle  : %s%nsolved  : %s%nsolution: %s%nframes  : %,d%nelapsed : %,d μs%n", puzzle, solved, solution, solver.getFrameCount(), solver.getElapsed() / 1000);
+        String solved = solver.getBoard();
+        System.out.printf("puzzle  : %s%nsolved  : %s%nsolution: %s%nframes  : %,d%nelapsed : %,d μs%n", puzzle, solver, solution, solver.getFrameCount(), solver.getElapsed() / 1000);
         assertTrue(solved, solver.isSolved());
         if (solution != null) {
             check(solved, solution);
@@ -49,6 +49,12 @@ public abstract class SudokuTest {
     public void oneStar() {
         solve(".549..67.8..5...4...68243...4...5..2.32...19.7..3...8...54139...2...9..3.19..786.",
                 "254931678893576241176824359948165732532748196761392485685413927427689513319257864");
+    }
+
+    @Test
+    public void twoStar() {
+        solve(".3.9.8...52..43....8....9.3.16.9....3.......1....3.62.7.2....9....87..42...2.5.6.",
+                "637958214529143786481726953216497835395682471874531629752364198163879542948215367");
     }
 
     @Test

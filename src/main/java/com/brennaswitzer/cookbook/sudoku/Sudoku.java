@@ -2,6 +2,8 @@ package com.brennaswitzer.cookbook.sudoku;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+
 public abstract class Sudoku implements Solver {
 
     private static final char EMPTY_INDICATOR = '.';
@@ -53,6 +55,48 @@ public abstract class Sudoku implements Solver {
         return r * dim + c;
     }
 
+    private int[][] neighborCache;
+
+    protected int[] getNeighbors(int cell) {
+        if (neighborCache == null) {
+            neighborCache = new int[len][];
+        }
+        if (neighborCache[cell] == null) {
+            int[] result = new int[(dim - 1) * 2 + (boxDim - 1) * (boxDim - 1)];
+            int idx = 0;
+
+            int row = cell / dim;
+            int col = cell % dim;
+            for (int i = 0; i < dim; i++) {
+                if (i != col) {
+                    result[idx++] = idx(row, i);
+                }
+                if (i != row) {
+                    result[idx++] = idx(i, col);
+                }
+            }
+
+            int boxRow = row - (row % boxDim);
+            int boxCol = col - (col % boxDim);
+            for (int r = 0; r < boxDim; r++) {
+                if (boxRow + r == row) continue;
+                for (int c = 0; c < boxDim; c++) {
+                    if (boxCol + c == col) continue;
+                    result[idx++] = idx(boxRow + r, boxCol + c);
+                }
+            }
+
+            neighborCache[cell] = result;
+        }
+        return neighborCache[cell];
+    }
+
+    @SuppressWarnings("unused")
+    protected int[] getNeighborsForMutation(int cell) {
+        int[] ns = getNeighbors(cell);
+        return Arrays.copyOf(ns, ns.length);
+    }
+
     protected abstract boolean solve();
 
     protected void enterFrame() {
@@ -60,10 +104,16 @@ public abstract class Sudoku implements Solver {
     }
 
     public final String toString() {
-        return getSolution();
+        String b = getBoard();
+        StringBuilder sb = new StringBuilder(b);
+        sb.append(" (");
+        int n = 0;
+        for (int i : board) if (i != EMPTY_CELL) n += 1;
+        sb.append(n).append(')');
+        return sb.toString();
     }
 
-    public final String getSolution() {
+    public final String getBoard() {
         StringBuilder sb = new StringBuilder();
         for (int i : board) {
             sb.append(i == EMPTY_CELL

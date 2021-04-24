@@ -4,7 +4,7 @@ public interface Solver {
 
     boolean isSolved();
 
-    String getSolution();
+    String getBoard();
 
     long getElapsed();
 
