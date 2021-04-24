@@ -2,7 +2,7 @@ package com.brennaswitzer.cookbook.sudoku;
 
 import lombok.Value;
 
-import java.util.*;
+import java.util.BitSet;
 
 public class AC3Solver extends Sudoku {
 
@@ -15,21 +15,31 @@ public class AC3Solver extends Sudoku {
         int x, y;
     }
 
+    @Value
+    private static class Node {
+        Arc arc;
+        Node next;
+    }
+
     private BitSet[] domains;
-    private Set<Arc> arcs;
+    private Arc[] arcs;
 
     protected boolean solve() {
         // variables are implicit: [0-len)
         buildDomains();
-        buildArcs(); // constraints are all binary and all "!="
-        Queue<Arc> worklist = new LinkedList<>(arcs);
-        while (!worklist.isEmpty()) {
+        buildArcs(); // constraints are all "binary !="
+        Node queue = null;
+        for (Arc a : arcs) {
+            queue = new Node(a, queue);
+        }
+        while (queue != null) {
             enterFrame();
-            Arc arc = worklist.remove();
+            Arc arc = queue.arc;
+            queue = queue.next;
             if (arcReduce(arc)) {
                 for (Arc a : arcs) {
                     if (a.x != arc.y && a.y == arc.x) {
-                        worklist.add(a);
+                        queue = new Node(a, queue);
                     }
                 }
             }
@@ -66,12 +76,14 @@ public class AC3Solver extends Sudoku {
     }
 
     private void buildArcs() {
-        arcs = new HashSet<>();
+        arcs = new Arc[len * getNeighbors(0).length];
+        int idx = 0;
         for (int c = 0; c < len; c++) {
             for (int n : getNeighbors(c)) {
-                arcs.add(new Arc(c, n));
+                arcs[idx++] = new Arc(c, n);
             }
         }
+        assert arcs.length == idx;
     }
 
     private void buildDomains() {
