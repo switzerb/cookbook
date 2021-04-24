@@ -12,7 +12,7 @@ public class BacktrackSolver extends Sudoku {
 
     private int findEmptyCell() {
         for (int i = 0; i < board.length; i++) {
-            if (board[i] == EMPTY) return i;
+            if (board[i] == EMPTY_CELL) return i;
         }
         return -1;
     }
@@ -22,17 +22,16 @@ public class BacktrackSolver extends Sudoku {
         if (i < 0) return true;
         enterFrame();
         for (int n = 1; n <= dim; n++) {
-            char c = (char) ('0' + n);
-            if (isAllowed(i, c)) {
-                board[i] = c;
+            if (isAllowed(i, n)) {
+                board[i] = n;
                 if (solve()) return true;
-                board[i] = EMPTY;
+                board[i] = EMPTY_CELL;
             }
         }
         return false;
     }
 
-    private boolean isAllowed(int cell, char candidate) {
+    private boolean isAllowed(int cell, int candidate) {
         int row = cell / dim;
         int col = cell % dim;
         for (int i = 0; i < dim; i++) {

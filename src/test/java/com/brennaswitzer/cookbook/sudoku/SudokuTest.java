@@ -24,7 +24,7 @@ public abstract class SudokuTest {
         if (solution != null) check(puzzle, solution);
         Solver solver = getSolver(puzzle);
         String solved = solver.getSolution();
-        System.out.printf("puzzle  : %s%nsolved  : %s%nsolution: %s%nframes  : %d%nelapsed : %,d μs%n", puzzle, solved, solution, solver.getFrameCount(), solver.getElapsed() / 1000);
+        System.out.printf("puzzle  : %s%nsolved  : %s%nsolution: %s%nframes  : %,d%nelapsed : %,d μs%n", puzzle, solved, solution, solver.getFrameCount(), solver.getElapsed() / 1000);
         assertTrue(solved, solver.isSolved());
         if (solution != null) {
             check(solved, solution);
