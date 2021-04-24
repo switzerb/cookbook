@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 
 import java.util.BitSet;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public class AC3Solver extends Sudoku {
 
@@ -23,7 +24,7 @@ public class AC3Solver extends Sudoku {
     protected boolean solve() {
         // variables are implicit: [0-len)
         buildDomains();
-        buildGivens();
+        applyGivens();
         buildArcs();
         Bag<Arc> queue = new Bag<>();
         for (Bag<Arc> arcs : inboundArcs) {
@@ -35,6 +36,9 @@ public class AC3Solver extends Sudoku {
             enterFrame();
             Arc arc = queue.pop();
             if (arcReduce(arc)) {
+                if (domains[arc.x].isEmpty()) {
+                    throw new IllegalArgumentException("Inconsistent/unsolvable problem?!");
+                }
                 for (Arc a : inboundArcs[arc.x]) {
                     if (a.x != arc.y) {
                         queue.push(a);
@@ -60,17 +64,21 @@ public class AC3Solver extends Sudoku {
 
     private boolean arcReduce(Arc arc) {
         BitSet Dx = domains[arc.x];
-        if (Dx.cardinality() == 1) return false;
-        boolean change = false;
         BitSet Dy = domains[arc.y];
+        return constrainDomain(Dx, vx ->
+                Dy.stream().anyMatch(vy ->
+                        arc.constraint.test(vx, vy)));
+    }
+
+    private boolean constrainDomain(BitSet Dx, Predicate<Integer> constraint) {
+        boolean changed = false;
         for (int i = Dx.nextSetBit(0); i >= 0; i = Dx.nextSetBit(i + 1)) {
-            int vx = i;
-            if (Dy.stream().noneMatch(vy -> arc.constraint.test(vx, vy))) {
+            if (!constraint.test(i)) {
                 Dx.clear(i);
-                change = true;
+                changed = true;
             }
         }
-        return change;
+        return changed;
     }
 
     private void buildArcs() {
@@ -85,11 +93,11 @@ public class AC3Solver extends Sudoku {
         }
     }
 
-    private void buildGivens() {
-        for (int i = 0; i < len; i++) {
-            if (board[i] != EMPTY_CELL) {
-                domains[i].clear();
-                domains[i].set(board[i]);
+    private void applyGivens() {
+        for (int c = 0; c < len; c++) {
+            if (board[c] != EMPTY_CELL) {
+                int n = board[c];
+                constrainDomain(domains[c], i -> i.equals(n));
             }
         }
     }

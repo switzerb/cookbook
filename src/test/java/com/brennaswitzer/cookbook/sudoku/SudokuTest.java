@@ -39,12 +39,13 @@ public abstract class SudokuTest {
     }
 
     protected void benchmark(String label, int iterations, BooleanSupplier work) {
-        assert work.getAsBoolean();
+        for (int i = 0, l = iterations / 25 + 1; i < l; i++)
+            assertTrue("Failed on warmup " + i, work.getAsBoolean());
         long start = System.nanoTime();
         for (int i = 0; i < iterations; i++)
-            assert work.getAsBoolean();
+            assertTrue("Failed on iteration " + i, work.getAsBoolean());
         long elapsed = System.nanoTime() - start;
-        System.out.printf("BENCHMARK[%s]: %,d μs, for %d iterations%n", label, elapsed / 1000 / iterations, iterations);
+        System.out.printf("BENCHMARK[%s]: %,d μs, over %d iterations%n", label, elapsed / 1000 / iterations, iterations);
     }
 
     @Test

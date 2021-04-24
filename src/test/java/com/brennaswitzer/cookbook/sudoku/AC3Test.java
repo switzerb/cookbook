@@ -11,7 +11,7 @@ public class AC3Test extends SudokuTest {
 
     @Test
     public void benchmark() {
-        benchmark("AC-3 One Star", 10, () ->
+        benchmark("AC-3 One Star", 100, () ->
                 new AC3Solver(ONE_STAR).isSolved());
     }
 
