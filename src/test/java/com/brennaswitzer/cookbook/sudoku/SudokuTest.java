@@ -21,7 +21,7 @@ public abstract class SudokuTest {
         assertEquals(puzzle.length(), solution.length());
         for (int i = 0, l = puzzle.length(); i < l; i++) {
             char c = puzzle.charAt(i);
-            if (c == '.') continue;
+            if (Sudoku.isEmptyIndicator(c)) continue;
             assertEquals(c + " in position " + i + " is inconsistent", "" + solution.charAt(i), "" + c);
         }
     }
@@ -30,7 +30,7 @@ public abstract class SudokuTest {
         if (solution != null) check(puzzle, solution);
         Solver solver = getSolver(puzzle);
         String solved = solver.getBoard();
-        System.out.printf("puzzle  : %s%nsolved  : %s%nsolution: %s%nframes  : %,d%nelapsed : %,d μs%n", puzzle, solver, solution, solver.getFrameCount(), solver.getElapsed() / 1000);
+        System.out.printf("puzzle  : %s%nsolved  : %s%nsolution: %s%nframes  : %,d%nelapsed : %,d μs%n", Sudoku.boardWithCount(puzzle), solver, solution, solver.getFrameCount(), solver.getElapsed() / 1000);
         assertTrue(solved, solver.isSolved());
         if (solution != null) {
             check(solved, solution);
@@ -71,6 +71,12 @@ public abstract class SudokuTest {
     public void twoStar() {
         solve(".3.9.8...52..43....8....9.3.16.9....3.......1....3.62.7.2....9....87..42...2.5.6.",
                 "637958214529143786481726953216497835395682471874531629752364198163879542948215367");
+    }
+
+    @Test
+    public void threeStar() {
+        solve(".263..7.....1....941.7.......78......82...15......48.......5.171....6.....9..368.",
+                null);
     }
 
     @Test

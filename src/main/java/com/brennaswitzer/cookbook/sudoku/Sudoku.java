@@ -6,8 +6,12 @@ import java.util.Arrays;
 
 public abstract class Sudoku implements Solver {
 
-    private static final char EMPTY_INDICATOR = '.';
+    private static final String EMPTY_INDICATORS = ".0 ";
     public static final int EMPTY_CELL = 0;
+
+    public static boolean isEmptyIndicator(char c) {
+        return EMPTY_INDICATORS.indexOf(c) >= 0;
+    }
 
     protected final int[] board;
     protected final int len;
@@ -32,7 +36,7 @@ public abstract class Sudoku implements Solver {
         this.board = new int[len];
         for (int i = 0; i < len; i++) {
             char c = board.charAt(i);
-            this.board[i] = c == EMPTY_INDICATOR
+            this.board[i] = isEmptyIndicator(c)
                     ? EMPTY_CELL
                     : c - '0';
         }
@@ -104,11 +108,18 @@ public abstract class Sudoku implements Solver {
     }
 
     public final String toString() {
-        String b = getBoard();
-        StringBuilder sb = new StringBuilder(b);
+        return boardWithCount(getBoard());
+    }
+
+    public static String boardWithCount(String board) {
+        StringBuilder sb = new StringBuilder(board);
         sb.append(" (");
         int n = 0;
-        for (int i : board) if (i != EMPTY_CELL) n += 1;
+        for (int i = board.length() - 1; i >= 0; i--) {
+            if (!isEmptyIndicator(board.charAt(i))) {
+                n += 1;
+            }
+        }
         sb.append(n).append(')');
         return sb.toString();
     }
@@ -117,7 +128,7 @@ public abstract class Sudoku implements Solver {
         StringBuilder sb = new StringBuilder();
         for (int i : board) {
             sb.append(i == EMPTY_CELL
-                    ? EMPTY_INDICATOR
+                    ? EMPTY_INDICATORS.charAt(0)
                     : (char) (i + '0'));
         }
         return sb.toString();
