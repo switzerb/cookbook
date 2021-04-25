@@ -1,5 +1,6 @@
 package com.brennaswitzer.cookbook.sudoku.ac3;
 
+import com.brennaswitzer.cookbook.sudoku.Utils;
 import com.brennaswitzer.cookbook.sudoku.util.Bag;
 import com.brennaswitzer.cookbook.sudoku.util.LinkedBag;
 import com.brennaswitzer.cookbook.sudoku.util.UniqueLinkedBag;
@@ -65,7 +66,7 @@ public class BitSetAC3 {
 
     private boolean constrainDomain(BitSet Dx, Predicate<Integer> constraint) {
         boolean changed = false;
-        for (int i = Dx.nextSetBit(0); i >= 0; i = Dx.nextSetBit(i + 1)) {
+        for (int i : Utils.asIterable(Dx)) {
             if (!constraint.test(i)) {
                 Dx.clear(i);
                 changed = true;
