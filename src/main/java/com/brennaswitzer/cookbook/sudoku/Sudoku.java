@@ -3,10 +3,13 @@ package com.brennaswitzer.cookbook.sudoku;
 import lombok.Getter;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class Sudoku implements Solver {
 
-    private static final String EMPTY_INDICATORS = ".0 ";
+    private static final String ALPHABET = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String EMPTY_INDICATORS = ". ";
     public static final int EMPTY_CELL = 0;
 
     public static boolean isEmptyIndicator(char c) {
@@ -14,6 +17,7 @@ public abstract class Sudoku implements Solver {
     }
 
     protected final int[] board;
+    protected final char[] alphabet;
     protected final int len;
     protected final int dim;
     protected final int boxDim;
@@ -27,20 +31,32 @@ public abstract class Sudoku implements Solver {
     @Getter
     private int frameCount = 0;
 
+    private final long start;
+
     public Sudoku(String board) {
         len = board.length();
         dim = (int) Math.sqrt(len);
-        assert dim * dim == len;
+        assert dim * dim == len : "Dim is " + dim + ", which isn't the root of " + len;
         boxDim = (int) Math.sqrt(dim);
         assert Math.pow(boxDim, 2) == dim;
         this.board = new int[len];
+        this.alphabet = ALPHABET.substring(0, dim).toCharArray();
+        Map<Character, Integer> chars = new HashMap<>();
+        for (int i = 0; i < alphabet.length; i++) {
+            chars.put(alphabet[i], i + 1);
+        }
         for (int i = 0; i < len; i++) {
             char c = board.charAt(i);
-            this.board[i] = isEmptyIndicator(c)
-                    ? EMPTY_CELL
-                    : c - '0';
+            if (isEmptyIndicator(c)) {
+                this.board[i] = EMPTY_CELL;
+            } else {
+                if (!chars.containsKey(c)) {
+                    throw new IllegalArgumentException("Puzzle has invalid '" + c + "' at position " + i);
+                }
+                this.board[i] = chars.get(c);
+            }
         }
-        long start = System.nanoTime();
+        start = System.nanoTime();
         this.solved = solve();
         this.elapsed = System.nanoTime() - start;
         if (!solved) {
@@ -105,6 +121,9 @@ public abstract class Sudoku implements Solver {
 
     protected void enterFrame() {
         frameCount += 1;
+        if ((frameCount & 0xffffff) == 0) {
+            System.out.printf("%,d s: %s%n", (System.nanoTime() - start) / 1_000_000_000, toString());
+        }
     }
 
     public final String toString() {
@@ -129,7 +148,7 @@ public abstract class Sudoku implements Solver {
         for (int i : board) {
             sb.append(i == EMPTY_CELL
                     ? EMPTY_INDICATORS.charAt(0)
-                    : (char) (i + '0'));
+                    : alphabet[i - 1]);
         }
         return sb.toString();
     }
