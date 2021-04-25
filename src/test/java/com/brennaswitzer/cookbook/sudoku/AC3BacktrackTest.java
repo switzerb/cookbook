@@ -2,28 +2,22 @@ package com.brennaswitzer.cookbook.sudoku;
 
 import org.junit.Test;
 
-public class BacktrackTest extends SudokuTest {
+public class AC3BacktrackTest extends SudokuTest {
 
     @Override
     protected Solver getSolver(String puzzle) {
-        return new BacktrackSolver(puzzle);
-    }
-
-    @Test
-    public void benchmarkOneStar() {
-        benchmark("Backtrack One Star", 1000, () ->
-                new BacktrackSolver(ONE_STAR).isSolved());
+        return new AC3BacktrackSolver(puzzle);
     }
 
     @Test
     public void benchmarkFiveStar() {
-        benchmark("Backtrack Five Star", 1000, () ->
+        benchmark("AC-3 Backtrack Five Star", 1000, () ->
                 new BacktrackSolver(FIVE_STAR).isSolved());
     }
 
     @Test
     public void benchmarkTableFive() {
-        benchmark("Backtrack Table Five", 10, () ->
+        benchmark("AC-3 Backtrack Table Five", 10, () ->
                 new BacktrackSolver(TABLE_FIVE).isSolved());
     }
 
@@ -72,6 +66,14 @@ public class BacktrackTest extends SudokuTest {
         super.tableFive();
     }
 
-    // the monsters take at least many minutes, perhaps hours, to backtrack
+    @Test
+    public void beginnerMonster() {
+        super.beginnerMonster();
+    }
+
+    @Test
+    public void expertMonster() {
+        super.expertMonster();
+    }
 
 }

@@ -2,7 +2,6 @@ package com.brennaswitzer.cookbook.sudoku;
 
 import lombok.Getter;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,13 +63,6 @@ public abstract class Sudoku implements Solver {
         }
     }
 
-    protected int findEmptyCell() {
-        for (int i = 0; i < len; i++) {
-            if (board[i] == EMPTY_CELL) return i;
-        }
-        return -1;
-    }
-
     protected int idx(int r, int c) {
         return r * dim + c;
     }
@@ -85,12 +77,6 @@ public abstract class Sudoku implements Solver {
             neighborCache[cell] = Utils.getNeighbors(this, cell);
         }
         return neighborCache[cell];
-    }
-
-    @SuppressWarnings("unused")
-    protected int[] getNeighborsForMutation(int cell) {
-        int[] ns = getNeighbors(cell);
-        return Arrays.copyOf(ns, ns.length);
     }
 
     protected abstract boolean solve();

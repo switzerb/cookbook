@@ -20,6 +20,13 @@ public class BacktrackSolver extends Sudoku {
         return false;
     }
 
+    private int findEmptyCell() {
+        for (int i = 0; i < len; i++) {
+            if (board[i] == EMPTY_CELL) return i;
+        }
+        return -1;
+    }
+
     private boolean isAllowed(int cell, int candidate) {
         for (int n : getNeighbors(cell)) {
             if (board[n] == candidate) return false;

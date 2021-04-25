@@ -14,9 +14,9 @@ public final class AC3Utils {
 
     public static BitSetAC3 ac3(Sudoku s) {
         return new BitSetAC3(
-                AC3Utils.buildDomains(s),
-                AC3Utils.buildUnaryConstraints(s),
-                AC3Utils.buildBinaryConstraints(s)
+                buildDomains(s),
+                buildUnaryConstraints(s),
+                buildBinaryConstraints(s)
         );
     }
 
@@ -51,6 +51,19 @@ public final class AC3Utils {
             }
         }
         return cons;
+    }
+
+    public static boolean rebuildBoard(Sudoku s, BitSet[] domains) {
+        boolean solved = true;
+        for (int i = 0; i < s.len; i++) {
+            BitSet d = domains[i];
+            if (d.cardinality() == 1) {
+                s.board[i] = d.nextSetBit(0);
+            } else {
+                solved = false;
+            }
+        }
+        return solved;
     }
 
 }

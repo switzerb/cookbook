@@ -26,10 +26,32 @@ public abstract class SudokuTest {
     }
 
     protected void solve(String puzzle, String solution) {
+        System.out.printf("puzzle  : %s%n", Sudoku.boardWithCount(puzzle));
         if (solution != null) check(puzzle, solution);
         Solver solver = getSolver(puzzle);
         String solved = solver.getBoard();
-        System.out.printf("puzzle  : %s%nsolved  : %s%nsolution: %s%nframes  : %,d%nelapsed : %,d μs%n", Sudoku.boardWithCount(puzzle), solver, solution, solver.getFrameCount(), solver.getElapsed() / 1000);
+        System.out.printf("solved  : %s%n", solver);
+        if (solution != null) {
+            System.out.printf("solution: %s%n", solution);
+            StringBuilder diff = new StringBuilder();
+            int count = 0;
+            for (int i = 0; i < solution.length(); i++) {
+                if (solution.charAt(i) == solved.charAt(i)) {
+                    diff.append(' ');
+                } else {
+                    diff.append('^');
+                    count += 1;
+                }
+            }
+            if (count > 0) {
+                diff.append(" (").append(count).append(')');
+                System.out.printf("          %s%n", diff);
+            }
+        }
+        if (solver.getFrameCount() > 1) {
+            System.out.printf("frames  : %,d%n", solver.getFrameCount());
+        }
+        System.out.printf("elapsed : %,d μs%n", solver.getElapsed() / 1000);
         if (solution != null) {
             check(solved, solution);
             assertEquals(solution, solved);
@@ -71,7 +93,7 @@ public abstract class SudokuTest {
 
     public void threeStar() {
         solve(".263..7.....1....941.7.......78......82...15......48.......5.171....6.....9..368.",
-                null);
+                "926358741873142569415769238547831926382697154691524873264985317138276495759413682");
     }
 
     public void fourStar() {
