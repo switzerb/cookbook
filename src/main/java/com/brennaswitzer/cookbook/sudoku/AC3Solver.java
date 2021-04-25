@@ -1,11 +1,5 @@
 package com.brennaswitzer.cookbook.sudoku;
 
-import com.brennaswitzer.cookbook.sudoku.ac3.BiConstraint;
-import com.brennaswitzer.cookbook.sudoku.ac3.BitSetAC3;
-import com.brennaswitzer.cookbook.sudoku.ac3.Constraint;
-import com.brennaswitzer.cookbook.sudoku.util.Bag;
-import com.brennaswitzer.cookbook.sudoku.util.LinkedBag;
-
 import java.util.BitSet;
 
 public class AC3Solver extends Sudoku {
@@ -15,12 +9,7 @@ public class AC3Solver extends Sudoku {
     }
 
     protected boolean solve() {
-        BitSetAC3 ac3 = new BitSetAC3(
-                buildDomains(),
-                buildUnaryConstraints(),
-                buildBinaryConstraints()
-        );
-        return rebuildBoard(ac3.getDomains());
+        return rebuildBoard(AC3Utils.ac3(this).getDomains());
     }
 
     private boolean rebuildBoard(BitSet[] domains) {
@@ -34,39 +23,6 @@ public class AC3Solver extends Sudoku {
             }
         }
         return solved;
-    }
-
-    private Bag<BiConstraint> buildBinaryConstraints() {
-        Bag<BiConstraint> cons = new LinkedBag<>();
-        for (int c = 0; c < len; c++) {
-            for (int n : getNeighbors(c)) {
-                cons.push(new BiConstraint(c, n, (a, b) -> !a.equals(b)));
-            }
-        }
-        return cons;
-    }
-
-    private Bag<Constraint> buildUnaryConstraints() {
-        Bag<Constraint> cons = new LinkedBag<>();
-        for (int c = 0; c < len; c++) {
-            if (board[c] != EMPTY_CELL) {
-                int n = board[c];
-                cons.push(new Constraint(c, i -> i.equals(n)));
-            }
-        }
-        return cons;
-    }
-
-    private BitSet[] buildDomains() {
-        BitSet seed = new BitSet(dim);
-        for (int i = 1; i <= dim; i++) {
-            seed.set(i);
-        }
-        BitSet[] domains = new BitSet[len];
-        for (int i = 0; i < len; i++) {
-            domains[i] = (BitSet) seed.clone();
-        }
-        return domains;
     }
 
 }
