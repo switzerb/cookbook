@@ -1,12 +1,12 @@
 package com.brennaswitzer.cookbook.sudoku;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.Value;
+import com.brennaswitzer.cookbook.sudoku.ac3.BiConstraint;
+import com.brennaswitzer.cookbook.sudoku.ac3.BitSetAC3;
+import com.brennaswitzer.cookbook.sudoku.ac3.Constraint;
+import com.brennaswitzer.cookbook.sudoku.util.Bag;
+import com.brennaswitzer.cookbook.sudoku.util.LinkedBag;
 
 import java.util.BitSet;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
 public class AC3Solver extends Sudoku {
 
@@ -14,70 +14,16 @@ public class AC3Solver extends Sudoku {
         super(board);
     }
 
-    @Value
-    private static class Constraint {
-
-        int x;
-
-        @EqualsAndHashCode.Exclude
-        @ToString.Exclude
-        Predicate<Integer> constraint;
-
-    }
-
-    @Value
-    private static class BiConstraint {
-
-        int x, y;
-
-        @EqualsAndHashCode.Exclude
-        @ToString.Exclude
-        BiPredicate<Integer, Integer> constraint;
-
-    }
-
-    private BitSet[] domains;
-
     protected boolean solve() {
-        // variables are implicit: [0-len)
-        domains = buildDomains();
-        for (Constraint c : buildUnaryConstraints()) {
-            constrainDomain(domains[c.x], c.constraint);
-        }
-        //noinspection unchecked
-        Bag<BiConstraint>[] inboundArcs = (Bag<BiConstraint>[]) new Bag[len];
-        for (int c = 0; c < len; c++) {
-            Bag<BiConstraint> arcs = new Bag<>();
-            inboundArcs[c] = arcs;
-        }
-        for (BiConstraint c : buildBinaryConstraints()) {
-            inboundArcs[c.y].push(c);
-        }
-
-        UniqueBag<BiConstraint> queue = new UniqueBag<>();
-        for (Bag<BiConstraint> arcs : inboundArcs) {
-            for (BiConstraint a : arcs) {
-                queue.push(a);
-            }
-        }
-        while (!queue.isEmpty()) {
-            enterFrame();
-            BiConstraint arc = queue.pop();
-            if (arcReduce(arc)) {
-                if (domains[arc.x].isEmpty()) {
-                    throw new IllegalArgumentException("Inconsistent/unsolvable problem?!");
-                }
-                for (BiConstraint a : inboundArcs[arc.x]) {
-                    if (a.x != arc.y) {
-                        queue.push(a);
-                    }
-                }
-            }
-        }
-        return rebuildBoard();
+        BitSetAC3 ac3 = new BitSetAC3(
+                buildDomains(),
+                buildUnaryConstraints(),
+                buildBinaryConstraints()
+        );
+        return rebuildBoard(ac3.getDomains());
     }
 
-    private boolean rebuildBoard() {
+    private boolean rebuildBoard(BitSet[] domains) {
         boolean solved = true;
         for (int i = 0; i < len; i++) {
             BitSet d = domains[i];
@@ -90,27 +36,8 @@ public class AC3Solver extends Sudoku {
         return solved;
     }
 
-    private boolean arcReduce(BiConstraint arc) {
-        BitSet Dx = domains[arc.x];
-        BitSet Dy = domains[arc.y];
-        return constrainDomain(Dx, vx ->
-                Dy.stream().anyMatch(vy ->
-                        arc.constraint.test(vx, vy)));
-    }
-
-    private boolean constrainDomain(BitSet Dx, Predicate<Integer> constraint) {
-        boolean changed = false;
-        for (int i = Dx.nextSetBit(0); i >= 0; i = Dx.nextSetBit(i + 1)) {
-            if (!constraint.test(i)) {
-                Dx.clear(i);
-                changed = true;
-            }
-        }
-        return changed;
-    }
-
     private Bag<BiConstraint> buildBinaryConstraints() {
-        Bag<BiConstraint> cons = new Bag<>();
+        Bag<BiConstraint> cons = new LinkedBag<>();
         for (int c = 0; c < len; c++) {
             for (int n : getNeighbors(c)) {
                 cons.push(new BiConstraint(c, n, (a, b) -> !a.equals(b)));
@@ -120,7 +47,7 @@ public class AC3Solver extends Sudoku {
     }
 
     private Bag<Constraint> buildUnaryConstraints() {
-        Bag<Constraint> cons = new Bag<>();
+        Bag<Constraint> cons = new LinkedBag<>();
         for (int c = 0; c < len; c++) {
             if (board[c] != EMPTY_CELL) {
                 int n = board[c];

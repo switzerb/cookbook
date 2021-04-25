@@ -1,11 +1,11 @@
-package com.brennaswitzer.cookbook.sudoku;
+package com.brennaswitzer.cookbook.sudoku.util;
 
 import lombok.Value;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Bag <E> implements Iterable<E> {
+public class LinkedBag<E> implements Bag<E> {
 
     @Value
     private static class Node<E> {
@@ -19,8 +19,9 @@ public class Bag <E> implements Iterable<E> {
         return head == null;
     }
 
-    public void push(E e) {
+    public boolean push(E e) {
         head = new Node<>(e, head);
+        return true;
     }
 
     public E pop() {

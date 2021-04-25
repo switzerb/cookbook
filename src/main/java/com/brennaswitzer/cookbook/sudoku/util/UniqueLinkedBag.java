@@ -1,12 +1,12 @@
-package com.brennaswitzer.cookbook.sudoku;
+package com.brennaswitzer.cookbook.sudoku.util;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class UniqueBag<E> implements Iterable<E> {
+public class UniqueLinkedBag<E> implements Bag<E> {
 
-    private final Bag<E> bag = new Bag<>();
+    private final LinkedBag<E> bag = new LinkedBag<>();
     private final Set<E> set = new HashSet<>();
 
     public boolean push(E e) {
